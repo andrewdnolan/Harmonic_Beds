@@ -26,7 +26,7 @@ for OFFSET in $(seq -w 2.0 0.1 3.0);do
        s#^$dt = [^ ]*#$dt = '"${dt}"'#;
        s#^\$RUN = [^ ]*#\$RUN = "'"${RUN}"'"#;
        s#^\$SMB_fp = [^ ]*#\$SMB_fp = "'"${SMB}"'"#;
-       s#^\$DATA_FOLDER = [^ ]*#\$DATA_FOLDER = "'"${DATA_FOLDER}"'"#' "$SIF" > "./SIFs/${RUN}.sif"
+       s#^\$OUT_FP = [^ ]*#\$OUT_FP = "'"${DATA_FOLDER}/${RUN}"'"#' "$SIF" > "./SIFs/${RUN}.sif"
 
   # ElmerSolver the .SIF file
   docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic; ElmerSolver SIFs/${RUN}.sif" | tee ./logs/${RUN}.log
