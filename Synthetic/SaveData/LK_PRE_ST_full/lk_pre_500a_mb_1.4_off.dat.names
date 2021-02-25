@@ -1,0 +1,23 @@
+Variables in file: ././Synthetic/SaveData/lk_pre_500a_mb_1.4_off.dat
+Elmer version: 9.0
+Elmer revision: e63387d4
+Elmer compilation date: 2020-11-20
+Solver input file: sifs/lk_pre_500a_mb_1.4_off.sif
+File started at: 2021/02/22 05:57:58
+Number of data nodes for each step
+  bc nodes: 101
+  polyline nodes: 0
+  circle nodes: 0
+  isocurve nodes: 0
+Data on different columns
+  1: Time step
+  2: Iteration step
+  3: Boundary condition
+  4: Node index
+  5: coordinate 1
+  6: coordinate 2
+  7: coordinate 3
+  8: zs
+  9: zbed
+ 10: velocity 1
+ 11: velocity 2
