@@ -6,7 +6,7 @@ TT=$((NT*dt))                       # total time of simulation
 SIF='./SIFs/Stokes_prognostic.sif'  # Template SIF FILE
 
 
-for OFFSET in $(seq -w 2.5 0.1 2.5);do
+for OFFSET in $(seq -w 2.0 0.1 3.0);do
 
   # Make the offset SMB profile
   python3 ./SRC/update_SMB.py ./Data/SMB_debris.dat $OFFSET
