@@ -9,7 +9,7 @@ $NT = 250
 $dt = 2.0
 $RUN = "LK_PRE_500a_MB_2.0_OFF"
 $SMB_fp = "./Data/EMY_SMB_2.00_OFF.dat"
-
+$DATA_FOLDER = "LK_PRE_ST_full"
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! BEGIN HEADER
@@ -225,7 +225,7 @@ Solver 7
   Equation      = SaveLine
   Procedure     = "SaveData" "SaveLine"
   Exec Interval = 5
-  Filename      = "./Synthetic/SaveData/"$RUN".dat"
+  Filename      = "./Synthetic/SaveData/"$DATA_FOLDER"/"$RUN".dat"
 
   Variable 1 = String "zs"
   Variable 2 = String "zbed"

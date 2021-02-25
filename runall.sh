@@ -5,6 +5,10 @@ dt=2                                # size of timestep
 TT=$((NT*dt))                       # total time of simulation
 SIF='./SIFs/Stokes_prognostic.sif'  # Template SIF FILE
 
+# Since we have multiple flow lines and still working on tweaking them
+# we will save that boundary files in specific directories which describe
+# the flowline and type of simulation the data is from.
+DATA_FOLDER='LK_PRE_ST_full'
 
 for OFFSET in $(seq -w 2.0 0.1 3.0);do
 
@@ -21,7 +25,8 @@ for OFFSET in $(seq -w 2.0 0.1 3.0);do
   sed 's#^$NT = [^ ]*#$NT = '"${NT}"'#;
        s#^$dt = [^ ]*#$dt = '"${dt}"'#;
        s#^\$RUN = [^ ]*#\$RUN = "'"${RUN}"'"#;
-       s#^\$SMB_fp = [^ ]*#\$SMB_fp = "'"${SMB}"'"#' "$SIF" > "./SIFs/${RUN}.sif"
+       s#^\$SMB_fp = [^ ]*#\$SMB_fp = "'"${SMB}"'"#;
+       s#^\$DATA_FOLDER = [^ ]*#\$DATA_FOLDER = "'"${DATA_FOLDER}"'"#' "$SIF" > "./SIFs/${RUN}.sif"
 
   # ElmerSolver the .SIF file
   docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic; ElmerSolver SIFs/${RUN}.sif" | tee ./logs/${RUN}.log
