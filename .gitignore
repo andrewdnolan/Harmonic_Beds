@@ -7,7 +7,7 @@
 *.tif
 *.TIFF
 
-# OSX stuff 
+# OSX stuff
 .DS_Store
 
 # Byte-compil# Byte-compiled / optimized / DLL files
