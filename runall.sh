@@ -3,7 +3,7 @@
 NT=250                              # Number of time step
 dt=2                                # size of timestep
 TT=$((NT*dt))                       # total time of simulation
-SIF='./SIFs/Stokes_prognostic.sif'  # Template SIF FILE
+SIF='./SIFs/Prognostic_SpinUp.sif'  # Template SIF FILE
 
 # Since we have multiple flow lines and still working on tweaking them
 # we will save that boundary files in specific directories which describe
