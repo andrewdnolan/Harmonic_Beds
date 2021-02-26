@@ -50,6 +50,7 @@ Simulation
   Timestep Intervals          = $NT
   Output Intervals            = $NT
 
+!  Output File                 = "$RUN".result"
   Post File                   = "$RUN".vtu"              !\"
   Max Output Level            = 3
 
