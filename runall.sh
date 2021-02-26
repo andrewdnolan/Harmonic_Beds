@@ -10,7 +10,7 @@ SIF='./SIFs/Stokes_prognostic.sif'  # Template SIF FILE
 # the flowline and type of simulation the data is from.
 DATA_FOLDER='LK_PRE_ST_full'
 
-for OFFSET in $(seq -w 2.0 0.1 3.0);do
+for OFFSET in $(seq -w 0.0 0.1 3.1);do
 
   # Make the offset SMB profile
   python3 ./SRC/update_SMB.py ./Data/SMB_debris.dat $OFFSET

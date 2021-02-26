@@ -1,53 +1,4 @@
-# #!/usr/bin/env python3
-#
-# import argparse
-# import numpy as np
-# from argparse import RawTextHelpFormatter
-#
-# fp     = '../Data/SMB_debris.dat'
-# offset = 1.5
-#
-# def offset_dat(fp, offset):
-#     """ Method of actually offset the data
-#     """
-#     # Read the src .dat file
-#     EMY_SMB      = np.loadtxt(fp)
-#
-#     # Add offset to the second (SMB in m/yr) column
-#     EMY_SMB[:,1] = EMY_SMB[:,1]+offset
-#
-#     # Write the new offseted data with a descriptive file name
-#     np.savetxt('./Data/EMY_SMB_{:1.2f}_OFF.dat'.format(offset), EMY_SMB, fmt='%.3e')
-#
-# def getparser():
-#     description = "Offset the SMB .dat file used for SS simulation "
-#
-#     parser = argparse.ArgumentParser(
-#         description=description, formatter_class=RawTextHelpFormatter
-#     )
-#     parser.add_argument(
-#         "fp",
-#         type=str,
-#         help="File path to the input SMB (m/yr) .dat file"
-#     )
-#     parser.add_argument(
-#         "offset",
-#         type=float,
-#         help="scalar value (float) to offset the SMB data"
-#     )
-#     return parser
-#
-# def main():
-#     parser = getparser()
-#     args   = parser.parse_args()
-#
-#     fp     = args.fp
-#     offset = float(args.offset)
-#
-#     offset_dat(fp, offset)
-# if __name__ == '__main__':
-#     main()
-
+#!/usr/bin/env python3
 """
 https://github.com/ICESAT-2HackWeek/intro-hdf5/blob/master/notebooks/intro-hdf5.ipynb
 https://www.pythonforthelab.com/blog/how-to-use-hdf5-files-in-python/
@@ -55,22 +6,38 @@ https://www.pythonforthelab.com/blog/how-to-use-hdf5-files-in-python/
 import h5py
 import numpy as np
 
-fp  = 'lk_pre_500a_mb_2.0_off.dat'
+def vm(vx, vy):
+    """Calculate vel. magnitude from x and y component"""
+    return np.sqrt(vx**2 + vy**2)
+
+fp  = './Synthetic/SaveData/LK_PRE_ST_FULL/lk_pre_500a_mb_2.6_off.dat'
 dat = np.loadtxt(fp)
+
+# Reshape the array  to match dimensions
 dat = dat.reshape(-1,101,11)
+# Flip all oders to sorts ascending.
 dat = dat[:,::-1,:]
 
-# Mask the surface elevation to bed elevation for anything less than bed elevation + 10.0
-dat[:,:,7][dat[:,:,7] < dat[:,:,8]+10] = dat[:,:,8][dat[:,:,7] < dat[:,:,8]+10]
+################################################################################
+# Deal with SMB data, this is not great. Need to have it written by the model
+################################################################################
+raw_MB = np.loadtxt('./Data/SMB_debris.dat')+ [0.0, 2.6]
+coefs  = np.polyfit(raw_MB[:,0], raw_MB[:,1], 3)
+b_dot  = np.polyval(coefs,dat[-1,:,4])
 
-with h5py.File('test_500a_mb_2.0_off.h5', 'w') as f:                           # open file in write mode
+# calculate ice thickness from z_s and z_b
+H = (dat[-1,:,7 ] - dat[-1,:,8])
+
+with h5py.File('LK_ST_500a_mb_2.6_off.h5', 'w') as f:            # open file in write mode
     f['x'    ] = dat[-1,:,4]                                     # x-coord (0 at term)
-    f['v_m'  ] = np.sqrt(dat[-1,:,9]**2 + dat[-1,:,10]**2)
-    f['b_dot'] = 0.004330612803970763*dat[-1,:,5]-10.6039+1.50
-    H          = dat[-1,:,7] - dat[-1,:,8]
-    f['H'    ] = np.where(H < 10.5, 0, H)
+    f['z_s'  ] = np.where(H <= 10.0, dat[-1,:,8], dat[-1,:,7 ])
+    f['z_b'  ] = dat[-1,:,8 ]
+    f['v_m'  ] = vm(dat[-1,:,9], dat[-1,:,10])
+    f['b_dot'] = b_dot
 
-    f['x'    ].attrs['units'] = 'idx'
-    f['v_m'  ].attrs['units'] = 'm a^{-1}'
-    f['b_dot'].attrs['units'] = 'm w.e. a^{-1}'
-    f['H'    ].attrs['units'] = 'm'
+
+import matplotlib.pyplot as pt
+
+plt.plot(dat[-1,:,4]  , np.where(H <= 10.0, dat[-1,:,8], dat[-1,:,7 ]))
+plt.plot(dat[-1,:,4], dat[-1,:,8 ])
+plt.show()
