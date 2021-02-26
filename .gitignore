@@ -7,6 +7,11 @@
 *.tif
 *.TIFF
 
+# Plots
+*.png
+*.pdf
+*.eps
+
 # OSX stuff
 .DS_Store
 
