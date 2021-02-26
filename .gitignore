@@ -1,6 +1,6 @@
 # Elmer/Ice Related files
 *.vtu
-*.results
+*.result
 *.dat
 *.dat.names
 *.h5
