@@ -171,7 +171,7 @@ Solver 4
    ! this enables the limitation of the free surface
    ! by upper and/or lower limits (see material section above)
    ! using a variational inequality formulation
-   ! Apply Dirichlet                         = Logical True
+   Apply Dirichlet                         = Logical True
 
    Linear System Solver                    = Iterative
    Linear System Iterative Method          = BiCGStab
@@ -186,10 +186,15 @@ Solver 4
    Steady State Convergence Tolerance      = 1.0e-4
 
    Stabilization Method                    = Stabilized
+
+   ! Needed to update the Accumulation b/w itterations
+   Nonlinear Update Exported Variables     = Logical True
    ! needed for evaluating the contact pressure
    Exported Variable 1                     = -dofs 1 "Zs Residual"
    ! needed for storing the initial shape (needed for updates)
    Exported Variable 2                     = -dofs 1 "RefZs"
+   ! needed for save surface boundary conditions
+   Exported Variable 3                     = -dofs 1 "Zs Accumulation Flux 2"
 End
 
 Solver 5
@@ -223,7 +228,7 @@ Solver 6
 End
 
 Solver 7
-  Equation      = SaveLine
+  Equation      = "SaveLine"
   Procedure     = "SaveData" "SaveLine"
   Exec Interval = 5
   Filename      = "./Synthetic/SaveData/"$OUT_FP".dat"
@@ -232,6 +237,7 @@ Solver 7
   Variable 2 = String "zbed"
   Variable 3 = String "Velocity 1"
   Variable 4 = String "Velocity 2"
+  Variable 5 = String "Zs Accumulation Flux 2"
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !                             END SOLVERS
@@ -282,10 +288,10 @@ Material 1
 End
 
 Material 2
-  ! Min Zs                     = Variable Zbed
-  !                              Real lua "tx[0] + 10.0"
-  ! Max Zs                     = Variable Zbed
-  !                              Real lua "tx[0] + 10000.0"
+  Min Zs                     = Variable Zbed
+                               Real lua "tx[0] + 10.0"
+  Max Zs                     = Variable Zbed
+                               Real lua "tx[0] + 10000.0"
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! END MATERIALs
@@ -311,7 +317,6 @@ Body Force 2
                                End
   ! Zs Accumulation Flux 2     = Variable Coordinate 2
   !                              Real MATC "accum(tx)"
-
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! END BODY FORCE
