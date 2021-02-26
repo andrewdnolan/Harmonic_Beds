@@ -10,7 +10,7 @@ SIF='./SIFs/Prognostic_SpinUp.sif'  # Template SIF FILE
 # the flowline and type of simulation the data is from.
 DATA_FOLDER='LK_PRE_ST_full'
 
-for OFFSET in $(seq -w 0.0 0.1 3.1);do
+for OFFSET in $(seq -w 2.6 0.1 2.6);do
 
   # Make the offset SMB profile
   python3 ./SRC/update_SMB.py ./Data/SMB_debris.dat $OFFSET
@@ -30,6 +30,9 @@ for OFFSET in $(seq -w 0.0 0.1 3.1);do
 
   # ElmerSolver the .SIF file
   docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic; ElmerSolver SIFs/${RUN}.sif" | tee ./logs/${RUN}.log
+
+  # clean the data and convert from .dat to .h5
+  python3 ./SRC/clean_data.py ./Synthetic/SaveData/${DATA_FOLDER}/${RUN}.dat
 
   # Remove the edited SIF to reduce clutter
   rm ./SIFs/${RUN}.sif
