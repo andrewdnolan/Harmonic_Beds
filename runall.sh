@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NT=250                              # Number of time step
+NT=501                              # Number of time step
 dt=2                                # size of timestep
 TT=$((NT*dt))                       # total time of simulation
 SIF='./SIFs/Prognostic_SpinUp.sif'  # Template SIF FILE
@@ -8,34 +8,31 @@ SIF='./SIFs/Prognostic_SpinUp.sif'  # Template SIF FILE
 # Since we have multiple flow lines and still working on tweaking them
 # we will save that boundary files in specific directories which describe
 # the flowline and type of simulation the data is from.
-DATA_FOLDER='LK_PRE_ST_full_SVR_mb'
+# DATA_FOLDER='LK_PRE_ST_full_SVR_mb'
 
-for OFFSET in $(seq -w 2.6 0.1 2.6);do
+for OFFSET in $(seq -w 0.00 0.10 2.51);do
+#for OFFSET in $(seq -w 2.50 0.10 2.50);do
 
-  # Make the offset SMB profile
-  python3 ./SRC/update_SMB.py ./Data/SMB_debris.dat $OFFSET
+  # Model RUN identifier
+  RUN="LK_PRE_${TT}a_MB_${OFFSET}_OFF"
 
-  # # Filename of offset SMB profile
-  # SMB="./Data/EMY_SMB_${OFFSET}_OFF.dat"
-  #
-  # # Model RUN identifier
-  # RUN="LK_PRE_${TT}a_MB_${OFFSET}_OFF_svr"
-  #
-  # # Update the .SIF FILE with the model run specifc params
-  # sed 's#^$NT = [^ ]*#$NT = '"${NT}"'#;
-  #      s#^$dt = [^ ]*#$dt = '"${dt}"'#;
-  #      s#^\$RUN = [^ ]*#\$RUN = "'"${RUN}"'"#;
-  #      s#^\$SMB_fp = [^ ]*#\$SMB_fp = "'"${SMB}"'"#;
-  #      s#^\$OUT_FP = [^ ]*#\$OUT_FP = "'"${DATA_FOLDER}/${RUN}"'"#' "$SIF" > "./SIFs/${RUN}.sif"
-  #
-  # # ElmerSolver the .SIF file
-  # docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic; ElmerSolver SIFs/${RUN}.sif" | tee ./logs/${RUN}.log
-  #
-  # # clean the data and convert from .dat to .h5
-  # #python3 ./SRC/clean_data.py ./Synthetic/SaveData/${DATA_FOLDER}/${RUN}.dat
-  #
-  # # Remove the edited SIF to reduce clutter
-  # rm ./SIFs/${RUN}.sif
-  # # Remove the offset SMB file to save space
-  # rm ./Data/EMY_SMB_*_OFF.dat
+  # Update the .SIF FILE with the model run specifc params
+  sed 's#^$NT = [^ ]*#$NT = '"${NT}"'#;
+       s#^$dt = [^ ]*#$dt = '"${dt}"'#;
+       s#^\$RUN = [^ ]*#\$RUN = "'"${RUN}"'"#;
+       s#^$offset = [^ ]*#\$offset = '"${OFFSET}"'#;' "$SIF" > "./SIFs/${RUN}.sif"
+
+  # ElmerSolver the .SIF file
+  docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic; ElmerSolver SIFs/${RUN}.sif \
+                                  | tee ./logs/Exp_01_elevation_dependent/${RUN}.log"
+
+  #clean the boundary data and convert from .dat to .h5
+  python3 ./SRC/dat2h5.py ./Synthetic/Exp_01_elevation_dependent/SaveData/${RUN}.dat \
+          -out_dir ./Synthetic/Exp_01_elevation_dependent/hdf5 -Nx 143
+
+  # Remove the edited SIF to reduce clutter
+  rm ./SIFs/${RUN}.sif
 done
+
+# After the full grid search of parameters lets make a plot showing  the convergence
+python SRC/plot_convergence.py ./Synthetic/Exp_01_elevation_dependent/hdf5
