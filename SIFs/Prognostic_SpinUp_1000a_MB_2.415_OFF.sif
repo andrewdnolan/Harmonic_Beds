@@ -6,9 +6,9 @@
 
 ! Variable updated via the bash run file
 $NT = 501
-$dt = 2
-$RUN = "LK_PRE_1002a_MB_1.6_OFF"
-$offset = 1.6
+$dt = 2.0
+$RUN = "Prog_SpinUp_1000a_MB_2.415_OFF"
+$offset = 2.415
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! BEGIN HEADER
@@ -16,7 +16,7 @@ $offset = 1.6
 Header
   CHECK KEYWORDS Warn
   Mesh DB "." "Synthetic"
-  Results Directory "Synthetic/Exp_01_elevation_dependent"
+  Results Directory ""
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! END HEADER
@@ -53,10 +53,10 @@ Simulation
   $output_intervals           = 501
   Timestep Sizes              = $dt
   Timestep Intervals          = $NT
-  Output Intervals            = $NT
+  Output Intervals            = 10 !$NT
 
-!  Output File                 = "$RUN".result"           !\"
-  Post File                   = "$RUN".vtu"              !\"
+  Output File                 = "Exp_02_Sliding/Restart/"$RUN".result"           !\"
+  Post File                   = "Exp_02_Sliding/Restart/"$RUN".vtu"              !\"
   Max Output Level            = 3
 
   Initialize Dirichlet Conditions = Logical False
@@ -252,7 +252,7 @@ Solver 6
   Exec Solver   = "before timestep"
   Procedure     = "SaveData" "SaveLine"
   Exec Interval = 1
-  Filename      = "/SaveData/"$RUN".dat"
+  Filename      = "Synthetic/Exp_02_Sliding/Restart/SaveData/"$RUN".dat"
 
   Variable 1    = String "zs"
   Variable 2    = String "zbed"

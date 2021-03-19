@@ -5,12 +5,9 @@
 #rhow      = 1000.0                                 ![kg m^-3]
 
 ! Variable updated via the bash run file
-$NT = 250
-$dt = 2.0
-$RUN = "pseduo_surge_test"
-$SMB_fp = "./Data/EMY_SMB_2.6_OFF.dat"
-$OUT_FP = "pseduo_surge_test"
 
+$RUN    = "pseduo_surge_test"
+$offset = 2.415
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! BEGIN HEADER
@@ -28,6 +25,9 @@ End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 Constants
   Stefan Boltzmann    = 5.67e-08                    ![W m^−2 K^−4]
+  Mass Balance Offset = real $offset                ![m a^-1]
+  gamma               = real -1.0e-05               ![ ] sklearn SVR hyperparameter
+  intercept           = real -1.2393076753413321    ![m a^-1] MB SVR intercept
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !                             END CONSTANTS
@@ -50,13 +50,13 @@ Simulation
   ! TimeStep intervals(3) = 23 40 23         ! 86 total timesteps
   ! Timestep Sizes(3)     = 1.0 0.1 1.0      ! 1/10 a a^{-1} timesteps during surges
   ! Output Intervals(3)   = 1 1 1            ! wrtie output every year
-  TimeStep intervals    = 100               ! 86 total timesteps
+  TimeStep intervals    = 100               ! 100 total timesteps
   Timestep Sizes        = 0.1               ! 1/10 a a^{-1} timesteps during surges
   Output Intervals      = 1                 ! wrtie output every 1/10 year
 !  Output File                 = "$RUN".result"
-  Post File                   = "$RUN".vtu"              !\"
+  Post File                   = "Exp_02_Sliding/Farinotti_filter_Savgol_p5_w21/"$RUN".vtu"              !\"
   Max Output Level            = 3
-  Restart File                = "LK_PRE_500a_MB_2.6_OFF.result"
+  Restart File                = "Exp_02_Sliding/Restart/prog_spinup_1000a_mb_2.415_off.result"
   Restart Position            = 0
   Restart Time                = Real 0.0
   Restart Before Initial Conditions = Logical False
@@ -88,6 +88,27 @@ End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! BEGIN EQUATION
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Equation 1
+  Name               = "Equation1"
+  Convection         = "computed"
+  Flow Solution Name = String "Flow Solution"
+  Active Solvers(6)  = 1 2 3 4 6 7
+End
+
+Equation 2
+  Name               = "Equation2"
+  Convection         = "computed" !!! CHANGE TO THIS ONE TO GET REASONABLE RESULTS
+  Active Solvers(1)  = 5
+  Flow Solution Name = String "Flow Solution"
+End
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! END EQUATION
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! BEGIN INITIAL CONDITIONS
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 Initial Condition 1
@@ -107,31 +128,50 @@ End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !                               BEGIN SOLVERS
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 Solver 1
   Exec Solver                              = "Before Simulation"
-  Equation                                 = "MapCoordinate_ini"
+  Equation                                 = "ExportVertically"
+  Procedure                                = File "ElmerIceSolvers" "ExportVertically"
+  Variable                                 = String "Zbed"
+  Variable DOFs                            = 1
+  Linear System Solver                     = Iterative
+  Linear System Iterative Method           = BiCGStab
+  Linear System Max Iterations             = 500
+  Linear System Preconditioning            = ILU1
+  Linear System Convergence Tolerance      = 1.0e-06
+
+  Nonlinear System Max Iterations          = 1
+  Nonlinear System Convergence Tolerance   = 1.0e-06
+End
+
+
+Solver 2
+  Exec Solver                              = "before timestep"
+  Equation                                 = "MapCoordinate"
   Procedure                                = "StructuredMeshMapper" "StructuredMeshMapper"
   Active Coordinate                        = Integer 2
+
+  Mesh Velocity Variable                   = String "Mesh Velocity 2"
+  Mesh Velocity First Zero                 = Logical True
   Dot Product Tolerance                    = real 0.01
 
   ! ! Essential to keep a minimum of 10 m flow height
-  Correct Surface                          = Logical True
-  Minimum Height                           = Real 10.0
-End
-
-Solver 2
-  Equation                                 = "Flowdepth"
-   Procedure                               = File "ElmerIceSolvers" "FlowDepthSolver"
-   Variable                                = String "Depth"
-   Variable DOFs                           = 1
-   Linear System Solver                    = "Direct"
-   ! this sets the direction
-   ! -1 is negative z-direction (upside down)
-   ! +1 is positive (downside up)
-   Gradient                                = Real -1.0E00
+  Correct Surface = Logical True
+  Minimum Height  = Real 10.0
 End
 
 Solver 3
+  Equation                                 = "HeightDepth"
+  Exec Solver                              = "Before Timestep"
+  Procedure                                = "StructuredProjectToPlane" "StructuredProjectToPlane"
+  Active Coordinate                        = Integer 2
+  Operator 1                               = Depth
+  Operator 2                               = Height
+End
+
+
+Solver 4
   Equation                                 = "Navier-Stokes"
   Optimize Bandwidth                       = Logical True
   Linear System Solver                     = Direct
@@ -159,7 +199,7 @@ Solver 3
   !Nonlinear System Relaxation Factor = 0.75
 End
 
-Solver 4
+Solver 5
    Exec Solver                             = always
    Equation                                = "Free Surface Evolution"
    Variable                                = String "Zs"
@@ -197,70 +237,31 @@ Solver 4
    Exported Variable 3                     = -dofs 1 "Zs Accumulation Flux 2"
 End
 
-Solver 5
-  Exec Solver                              = "Before Simulation"
-  Equation                                 = "ExportVertically"
-  Procedure                                = File "ElmerIceSolvers" "ExportVertically"
-  Variable                                 = String "Zbed"
-  Variable DOFs                            = 1
-  Linear System Solver                     = Iterative
-  Linear System Iterative Method           = BiCGStab
-  Linear System Max Iterations             = 500
-  Linear System Preconditioning            = ILU1
-  Linear System Convergence Tolerance      = 1.0e-06
-
-  Nonlinear System Max Iterations          = 1
-  Nonlinear System Convergence Tolerance   = 1.0e-06
-End
-
 Solver 6
-  Equation                                 = "MapCoordinate"
-  Procedure                                = "StructuredMeshMapper" "StructuredMeshMapper"
-  Active Coordinate                        = Integer 2
-
-  Mesh Velocity Variable                   = String "Mesh Velocity 2"
-  Mesh Velocity First Zero                 = Logical True
-  Dot Product Tolerance                    = real 0.01
-
-  ! ! Essential to keep a minimum of 10 m flow height
-  Correct Surface = Logical True
-  Minimum Height  = Real 10.0
+  Equation      = "SaveBoundaryValues"
+  Procedure     = File "SaveData" "SaveBoundaryValues"
+  Exec Solver   = Before TimeStep
+  ! a dummy variable for the solver that does not show up
+  Variable      = String -nooutput "dummyvar"
+  Parameter 1   =  String "Slip Coefficient 2"
 End
 
 Solver 7
   Equation      = "SaveLine"
   Procedure     = "SaveData" "SaveLine"
+  Exec Solver   = Before TimeStep
   Exec Interval = 1
-  Filename      = "./Synthetic/SaveData/"$OUT_FP".dat"
+  Filename      = "./Synthetic/Exp_02_Sliding/Farinotti_filter_Savgol_p5_w21/SaveData/"$RUN".dat"
 
   Variable 1 = String "zs"
   Variable 2 = String "zbed"
   Variable 3 = String "Velocity 1"
   Variable 4 = String "Velocity 2"
   Variable 5 = String "Zs Accumulation Flux 2"
+  Variable 6 = String "Slip Coefficient 2"
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !                             END SOLVERS
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! BEGIN EQUATION
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-Equation 1
-  Name               = "Equation1"
-  Convection         = "computed"
-  Flow Solution Name = String "Flow Solution"
-  Active Solvers(6)  = 1 2 3 5 6 7
-End
-
-Equation 2
-  Name               = "Equation2"
-  Convection         = "computed" !!! CHANGE TO THIS ONE TO GET REASONABLE RESULTS
-  Active Solvers(1)  = 4
-  Flow Solution Name = String "Flow Solution"
-End
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! END EQUATION
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -289,7 +290,7 @@ End
 
 Material 2
   Min Zs                     = Variable Zbed
-                               Real lua "tx[0] + 10.0"
+                               Real lua "tx[0] + 1.0"
   Max Zs                     = Variable Zbed
                                Real lua "tx[0] + 10000.0"
 End
@@ -304,19 +305,15 @@ Body Force 1
   Name                       = "BodyForce"
   Flow BodyForce 1           = Real 0.0
   Flow BodyForce 2           = Real -9.7696e15  !gravity in MPa - a - m
-  Flow Solution Passive      = Variable depth
-                               Real lua "(tx[0] < 10.0)"
+  Flow Solution Passive      = Variable depth, height
+                               Real lua "((tx[0] + tx[1]) < 10.0)"
 End
 
 Body Force 2
   Name                       = "Climate"
   Zs Accumulation Flux 1     = Real 0.0e0
-  Zs Accumulation Flux 2     = Variable Coordinate 1
-                               Real cubic
-                                include   $SMB_fp
-                               End
-  ! Zs Accumulation Flux 2     = Variable Coordinate 2
-  !                              Real MATC "accum(tx)"
+  Zs Accumulation Flux 2     = Variable Coordinate 2
+                                Real Procedure "./bin/accumulation" "getAccumulation"
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! END BODY FORCE
@@ -337,8 +334,8 @@ Boundary Condition 1
   Velocity 1                 = Real 0.0e0
   ! Slip Coefficient 2         = Variable TimeStep, Coordinate 1
   !       Real MATC "if (0.995 < sin((tx(0)-10.0)*0.1)) (0.001); else (1.0);"
-  Slip Coefficient 2 = Variable TimeStep
-        Real MATC "if (1 > 0) (0.001)"
+  Slip Coefficient 2 = Variable Coordinate 1
+        Real MATC "if (tx(0) < 27000) (0.00035); else (1.0)"  ! reference good value is 0.001
 
 
   Zbed                       = Variable Coordinate 1
@@ -353,7 +350,6 @@ Boundary Condition 1
   Save Line                  = Logical True
 End
 
-! I think that this is causing problems, lets sperate them (i.e. top and bottom boundaries)
 Boundary Condition 2
   Name                       = "sides"
   Target Boundaries(2)       = 3 4
@@ -363,7 +359,7 @@ End
 
 Boundary Condition 3
   Name                       = "surface"
-  Depth = real 0.0
+  Depth                      = real 0.0
   Top Surface                = Equals "Zs"
   Target Boundaries          = 2
   Body ID                    = 2 !!! THIS IS ESSENTIAL

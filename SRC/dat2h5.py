@@ -4,8 +4,9 @@ https://github.com/ICESAT-2HackWeek/intro-hdf5/blob/master/notebooks/intro-hdf5.
 https://www.pythonforthelab.com/blog/how-to-use-hdf5-files-in-python/
 """
 import os
-import h5py
 import numpy as np
+import xarray as xr
+
 import argparse
 from argparse import RawTextHelpFormatter
 
@@ -61,6 +62,16 @@ def getparser():
         type=int,
         help="number of gridcell"
     )
+    parser.add_argument(
+        "-dt",
+        type=float,
+        help="TimeStep size"
+    )
+    parser.add_argument(
+        "-Beta",
+        action='store_true',
+        help="include slip coef? add flag if true"
+    )
     return parser
 
 def main():
@@ -70,6 +81,8 @@ def main():
     # Get filepath from parser
     fp     = args.fp
     Nx     = args.Nx
+    dt     = args.dt
+
     # Get output dir from parser
     if not args.out_dir:
         # if None  then the current working directory
@@ -77,39 +90,82 @@ def main():
     else:
         out_dir = args.out_dir
 
+
+    Beta = args.Beta
+
     dat = np.loadtxt(fp)
 
     # remove directory structure is present and remove .dat file extensiosn
     # which is replaced with .h5
-    out_fn = os.path.splitext(fp.split('/')[-1])[0] + '.h5'
+    out_fn = os.path.splitext(fp.split('/')[-1])[0] + '.nc'
 
     # Combine out_fn with the write directory
     out_fp = os.path.join(out_dir, out_fn)
 
-    # Reshape the array  to match dimensions
-    dat = dat.reshape(-1,Nx,12)
+    if Beta:
+        # Reshape the array  to match dimensions
+        dat = dat.reshape(-1,Nx,13)
+    else:
+        # Reshape the array  to match dimensions
+        dat = dat.reshape(-1,Nx,12)
     #dat = dat.reshape(-1,Nx,11)
 
     # # Flip all orders to sorts ascending.
     dat = dat[:,::-1,:]
 
-    # calculate ice thickness from z_s and z_b
-    H = (dat[:,:,7 ] - dat[:,:,8])
+    if Beta:
+        # calculate ice thickness from z_s and z_b
+        H = (dat[0::2,:,7 ] - dat[0::2,:,8])
+    else:
+        # calculate ice thickness from z_s and z_b
+        H = (dat[:,:,7 ] - dat[:,:,8])
 
     mask = correct_zs_mask(H, H_min=10.0, axis=1)
 
-    #open file in write mode
-    with h5py.File(out_fp, 'w') as f:
-        # x-coord (0 at term)
-        f['x'    ] = dat[:,:,4]
-        # Test if ice thickness greater than 10.0 (minimum ice thicknes in SIF)
-        f['z_s'  ] = np.where(mask, dat[:,:,7], dat[:,:,8])
-        # Bed elevation
-        f['z_b'  ] = dat[:,:,8 ]
-        # Compute velocity magnitude from x and y components
-        f['v_m'  ] = vm(dat[:,:,9], dat[:,:,10])
-        # surface mass balance
-        f['b_dot'] = dat[:,:,11]
+    print(dt)
+
+    if Beta:
+        x     = dat[0,:,4].T
+        t     = dt * dat[0::2,0,0].T
+        z_s   = np.where(H>=10.0, dat[0::2,:,7], dat[1::2,:,8]).T
+        #z_s   = dat[0::2,:,7].T
+        z_b   = dat[1::2,:,8].T
+        v_s   = vm(dat[0::2,:,9], dat[0::2,:,10]).T
+        v_b   = vm(dat[1::2,:,9], dat[1::2,:,10]).T
+        b_dot = dat[0::2,:,11].T
+        beta  = dat[1::2,:,12].T
+
+        ds = xr.Dataset(
+            {
+                "z_s"  : (("x", "t"), z_s),
+                "z_b"  : (("x", "t"), z_b),
+                "v_s"  : (("x", "t"), v_s),
+                "v_b"  : (("x", "t"), v_b),
+                "b_dot": (("x", "t"), b_dot),
+                "beta" : (("x", "t"), beta),
+            },
+            {"x":x, "t": t}
+            )
+
+    else:
+        x     = dat[:,:,4].T
+        t     = dt * dat[:,:,0].T
+        z_s   = np.where(mask, dat[:,:,7], dat[:,:,8]).T
+        z_b   = dat[:,:,8].T
+        v_m   = vm(dat[:,:,9], dat[:,:,10]).T
+        b_dot = dat[:,:,11].T
+
+        ds = xr.Dataset(
+            {
+                "z_s"  : (("x", "t"), z_s),
+                "z_b"  : (("x", "t"), z_b),
+                "v_m"  : (("x", "t"), v_m),
+                "b_dot": (("x", "t"), b_dot),
+            },
+            {"x":x, "t":t}
+            )
+
+    ds.to_netcdf(out_fp)
 
 if __name__ == '__main__':
     main()
