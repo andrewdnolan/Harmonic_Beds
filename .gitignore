@@ -4,6 +4,7 @@
 *.dat
 *.dat.names
 *.h5
+*.nc
 *.tif
 *.TIFF
 
