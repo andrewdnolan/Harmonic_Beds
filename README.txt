@@ -1,9 +1,6 @@
 # Harmonic Beds for Bayes Inversion
 
-_This Project is in active development_
 
-
-----
 __To Do __:
 
   - [ ] Rerun $\Delta \dot b$ grid search on 100 $\rm{m}$ grid on WestGrid
