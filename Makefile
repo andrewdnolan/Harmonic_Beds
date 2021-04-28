@@ -1,9 +1,9 @@
-# Names of the compiled executables used in .sif files
+# compiled executables used in .sif files
 EXEC = bin/accumulation
 
 all: $(EXEC)
 
-# Compile the *.F90 files with `elmerf90` alias
+# compile the *.F90 files with the `elmerf90` alias
 bin/% : SRC/elmerlib/%.F90
 	elmerf90 $< -o $@
 
