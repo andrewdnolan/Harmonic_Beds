@@ -11,7 +11,7 @@
 
 
 grdfile="./Mesh/Synthetic.grd"
-bedfile="./Data/BedTopo.dat"
+bedfile="./Data/Topography/REF_BedTopo.dat"
 
 
 start=$(awk 'NR==1 {print $1}' $bedfile)
@@ -20,8 +20,8 @@ start=$(awk 'NR==1 {print $1}' $bedfile)
 # ${end} will be the length of our domain now set our x-gricell spacing (dx),
 #  then back solve for the appropriate number of x-gridcells (Nx)
 
-# Set the gridcell spacing to 200 m
-dx=200
+# Set the gridcell spacing to 100 m
+dx=100
 
 # We'll use awk to do this calculation. Wow thats complicated
 # for such a simple calc.  ¯\_(ツ)_/¯
@@ -42,10 +42,14 @@ update_grd $start $end $Nx $grdfile
 cp ${grdfile} ./
 
 # Make the mesh with ElmerGrid. This must be executed within a Docker instance
+echo
+echo '--------------------------------------------------------------------------'
 echo "Making Elmer Compatible Grid"
-echo "$ElmerGrid 1 2 ${grdfile} -autoclean"
+echo "ElmerGrid 1 2 ./${grdfile} -out ${1} -autoclean"
+echo '--------------------------------------------------------------------------'
+echo
 
-ElmerGrid 1 2 Synthetic.grd -autoclean
+ElmerGrid 1 2 Synthetic.grd -out $1 -autoclean
 
 if test -f "${HOME}/shared_directory/Synthetic/Synthetic.grd"; then
   rm ~/shared_directory/Synthetic/Synthetic.grd

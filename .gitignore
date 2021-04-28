@@ -9,9 +9,12 @@
 *.TIFF
 
 # Plots
+plots/
 *.png
 *.pdf
 *.eps
+*.mp4
+
 
 # OSX stuff
 .DS_Store
