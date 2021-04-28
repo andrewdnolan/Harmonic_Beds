@@ -10,6 +10,12 @@
 *.npy
 *.pkl
 
+# Include these since they are needed for all the model runs
+!Data/Topography/REF*
+!Data/SMB/SVR/dual_coef.dat
+!Data/SMB/SVR/support_vectors.dat
+
+
 # Plots
 plots/
 *.png
