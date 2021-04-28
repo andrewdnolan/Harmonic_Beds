@@ -1,4 +1,4 @@
-# Elmer/Ice Related files
+# All datafiles that are written by Elmer or postprocessed files
 *.vtu
 *.result
 *.dat
@@ -15,6 +15,8 @@
 !Data/SMB/SVR/dual_coef.dat
 !Data/SMB/SVR/support_vectors.dat
 
+# Ignore all the compiled code
+bin/*
 
 # Plots
 plots/
@@ -22,7 +24,6 @@ plots/
 *.pdf
 *.eps
 *.mp4
-
 
 # OSX stuff
 .DS_Store
