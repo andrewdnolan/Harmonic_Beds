@@ -1,0 +1,5 @@
+STOP 1
+Traceback (most recent call last):
+  File "./SRC/utils/dat2h5.py", line 7, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
