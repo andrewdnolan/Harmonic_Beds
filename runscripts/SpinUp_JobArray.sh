@@ -22,8 +22,8 @@ module load elmerfem/9.0
 module load python/3.6
 
 # Creating virtual environments inside of your jobs
-virtualenv --no-download $SLURM_TMPDIR/env
-source $SLURM_TMPDIR/env/bin/activate
+virtualenv --no-download $SLURM_TMPDIR/env_$SLURM_ARRAY_TASK_ID
+source $SLURM_TMPDIR/env_$SLURM_ARRAY_TASK_ID/bin/activate
 
 pip install --no-index --upgrade pip
 pip install --no-index -r $HOME/requirements.txt
