@@ -3,6 +3,8 @@
 #SBATCH --job-name=SpinUp_2000a_dt_1_dx_100_       # base job name for the array
 #SBATCH --mem=50                                   # maximum 100M per job
 #SBATCH --time=0:30:00                             # maximum walltime per job
+#SBATCH --nodes=1                                  # Only one node is needed
+#SBATCH --ntasks=1                                 # These are serial jobs
 #SBATCH --mail-type=ALL                            # send all mail (way to much)
 #SBATCH --mail-user=andrew.d.nolan@maine.edu       # email to spend updates too
 #SBATCH --output=logs/myprog%A%a.out               # standard output

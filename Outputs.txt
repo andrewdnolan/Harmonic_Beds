@@ -1,0 +1,1 @@
+python3 ./SRC/utils/dat2h5.py ./Synthetic/Farinotti_smooth/Exp_01_elevation_dependent/SaveData/LK_PRE_2000a_dt_1_dx_100_MB_2.07_OFF.dat -out_dir ./Synthetic/Farinotti_smooth/Exp_01_elevation_dependent/hdf5 -Nx 284 -dt 1 -offset 2.07 -SpinUp
