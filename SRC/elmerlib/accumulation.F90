@@ -30,7 +30,7 @@ FUNCTION getAccumulation(  Model, Node, InputArray) RESULT(accum)
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     SV   = 0
     ! OPEN the x locations to make predictions file
-    OPEN(unit=30,file='./DATA/SMB/SVR/support_vectors.dat',status='old',action='read')
+    OPEN(unit=30,file='./Data/SMB/SVR/support_vectors.dat',status='old',action='read')
     ! READ the rows of the x locations to make predictions file
     DO
       READ (30,*, END=15)
@@ -44,7 +44,7 @@ FUNCTION getAccumulation(  Model, Node, InputArray) RESULT(accum)
     ALLOCATE(support_vectors(SV,1), STAT = AllocateStatus)
     IF (AllocateStatus /= 0) STOP "*** Not enough memory ***"
     ! OPEN the support vector file
-    OPEN(unit=30,file='./DATA/SMB/SVR/support_vectors.dat',status='old',action='read')
+    OPEN(unit=30,file='./Data/SMB/SVR/support_vectors.dat',status='old',action='read')
     ! READ the rows of the support vectors file
     DO i=1,SV
       READ (30,*) support_vectors(i,1)

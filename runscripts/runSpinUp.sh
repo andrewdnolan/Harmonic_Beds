@@ -28,8 +28,8 @@ for OFFSET in $(seq -w 2.00 0.01 2.50);do
   #
   # # Clean the boundary data and convert from .dat to .nc
   echo python3 ./SRC/utils/dat2h5.py \
-          ./Synthetic/${BED}/Exp_01_elevation_dependent/SaveData/${RUN}.dat \
-          -out_dir ./Synthetic/${BED}/Exp_01_elevation_dependent/hdf5 \
+          ./Synthetic/${BED}/exp_01_elevation_dependent/SaveData/${RUN}.dat \
+          -out_dir ./Synthetic/${BED}/exp_01_elevation_dependent/hdf5 \
           -Nx 284 \
           -dt $dt \
           -offset $OFFSET \
