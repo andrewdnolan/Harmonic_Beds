@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --array=1-51                               # 50 jobs
 #SBATCH --job-name=SpinUp_2000a_dt_1_dx_100_       # base job name for the array
-#SBATCH --mem=75                                   # maximum 100M per job
+#SBATCH --mem=100                                  # maximum 100M per job
 #SBATCH --time=0:45:00                             # maximum walltime per job
 #SBATCH --nodes=1                                  # Only one node is needed
 #SBATCH --ntasks=1                                 # These are serial jobs
