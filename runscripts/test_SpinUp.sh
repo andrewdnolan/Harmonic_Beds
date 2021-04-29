@@ -30,7 +30,7 @@ SIF=$(  sed -n "51p" Inputs.txt)
 CLEAN=$(sed -n "51p" Outputs.txt)
 
 # Execute the .sif file
-# ElmerSolver $SIF > logs/${SIF##*/}.log
+ElmerSolver $SIF > logs/${SIF##*/}.log
 
 # Clean the data using the `dat2h5.py` script
 $CLEAN
