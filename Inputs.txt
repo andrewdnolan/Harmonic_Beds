@@ -1,4 +1,3 @@
-./SRC/SIFs/LK_PRE_2000a_dt_1_dx_100_MB_2.07_OFF.sif
 ./SRC/SIFs/LK_PRE_2000a_dt_1_dx_100_MB_2.00_OFF.sif
 ./SRC/SIFs/LK_PRE_2000a_dt_1_dx_100_MB_2.01_OFF.sif
 ./SRC/SIFs/LK_PRE_2000a_dt_1_dx_100_MB_2.02_OFF.sif

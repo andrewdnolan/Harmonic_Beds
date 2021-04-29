@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name="quick test"                    # base job name for the array
-#SBATCH --mem=500                                  # maximum 500M per job
+#SBATCH --mem=50                                   # maximum 500M per job
 #SBATCH --time=0:30:00                             # maximum walltime per job
 #SBATCH --mail-type=ALL                            # send all mail (way to much)
 #SBATCH --mail-user=andrew.d.nolan@maine.edu       # email to spend updates too

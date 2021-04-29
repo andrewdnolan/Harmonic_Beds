@@ -8,7 +8,7 @@
 $NT = 2001
 $dt = 1
 $RUN = "LK_PRE_2000a_dt_1_dx_100_MB_2.13_OFF"
-$BED = "Farinotti_smooth"
+$BED = "farinotti_smooth"
 $offset = 2.13
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
