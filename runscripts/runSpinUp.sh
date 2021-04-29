@@ -9,7 +9,7 @@ SIF='./SRC/SIFs/Prognostic_SpinUp.sif'  # Template SIF FILE
 BED='farinotti_smooth'                  # Mesh DB for the given bed config
 
 for OFFSET in $(seq -w 2.00 0.01 2.50);do
-#for OFFSET in $(seq -w 2.07 0.01 2.07); do
+  
   # Model RUN identifier
   RUN="LK_PRE_${TT}a_dt_${dt}_dx_100_MB_${OFFSET}_OFF"
 

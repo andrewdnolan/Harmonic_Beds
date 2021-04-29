@@ -1,14 +1,14 @@
 #!/bin/bash
 #SBATCH --array=1-51                               # 50 jobs
 #SBATCH --job-name=SpinUp_2000a_dt_1_dx_100_       # base job name for the array
-#SBATCH --mem=50                                   # maximum 100M per job
-#SBATCH --time=0:30:00                             # maximum walltime per job
+#SBATCH --mem=75                                   # maximum 100M per job
+#SBATCH --time=0:45:00                             # maximum walltime per job
 #SBATCH --nodes=1                                  # Only one node is needed
 #SBATCH --ntasks=1                                 # These are serial jobs
 #SBATCH --mail-type=ALL                            # send all mail (way to much)
 #SBATCH --mail-user=andrew.d.nolan@maine.edu       # email to spend updates too
-#SBATCH --output=logs/myprog%A%a.out               # standard output
-#SBATCH --error=logs/myprog%A%a.err                # standard error
+#SBATCH --output=logs/SpinUp_dx_100_%A%a.out       # standard output
+#SBATCH --error=logs/SpinUp_dx_100_%A%a.err        # standard error
 # in the previous two lines %A" is replaced by jobID and "%a" with the array index
 
 ###############################################################################
@@ -16,7 +16,7 @@
 ###############################################################################
 # Load Elmer
 module load gcc/9.3.0
-module load elmerfem/scc20
+module load elmerfem/9.0
 
 # Load python 3
 module load python/3.6
@@ -28,7 +28,6 @@ source $SLURM_TMPDIR/env/bin/activate
 pip install --no-index --upgrade pip
 pip install --no-index -r $HOME/requirements.txt
 ###############################################################################
-
 
 # Get the fp to a .sif file
 SIF=$(  sed -n "${SLURM_ARRAY_TASK_ID}p" Inputs.txt)
