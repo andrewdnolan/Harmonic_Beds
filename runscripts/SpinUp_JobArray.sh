@@ -1,14 +1,14 @@
 #!/bin/bash
-#SBATCH --array=1-51                               # 50 jobs
+#SBATCH --array=1-51%10                            # 50 jobs that run 10 at a time
 #SBATCH --job-name=SpinUp_2000a_dt_1_dx_100_       # base job name for the array
-#SBATCH --mem=100                                  # maximum 100M per job
+#SBATCH --mem-per-cpu=150                          # maximum 150M per job
 #SBATCH --time=0:45:00                             # maximum walltime per job
 #SBATCH --nodes=1                                  # Only one node is needed
 #SBATCH --ntasks=1                                 # These are serial jobs
 #SBATCH --mail-type=ALL                            # send all mail (way to much)
 #SBATCH --mail-user=andrew.d.nolan@maine.edu       # email to spend updates too
-#SBATCH --output=logs/SpinUp_dx_100_%A%a.out       # standard output
-#SBATCH --error=logs/SpinUp_dx_100_%A%a.err        # standard error
+#SBATCH --output=logs/SpinUp_dx_100_%A_%a.out       # standard output
+#SBATCH --error=logs/SpinUp_dx_100_%A_%a.err        # standard error
 # in the previous two lines %A" is replaced by jobID and "%a" with the array index
 
 ###############################################################################
@@ -22,8 +22,8 @@ module load elmerfem/9.0
 module load python/3.6
 
 # Creating virtual environments inside of your jobs
-virtualenv --no-download $SLURM_TMPDIR/env_$SLURM_ARRAY_TASK_ID
-source $SLURM_TMPDIR/env_$SLURM_ARRAY_TASK_ID/bin/activate
+virtualenv --no-download $SLURM_TMPDIR/env
+source $SLURM_TMPDIR/env/bin/activate
 
 pip install --no-index --upgrade pip
 pip install --no-index -r $HOME/requirements.txt
