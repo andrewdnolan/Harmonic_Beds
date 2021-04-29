@@ -20,7 +20,7 @@ for OFFSET in $(seq -w 2.07 0.01 2.07);do
        s#^\$BED = [^ ]*#\$BED = "'"${BED}"'"#;
        s#^$offset = [^ ]*#\$offset = '"${OFFSET}"'#;' "$SIF" > "./SRC/SIFs/${RUN}.sif"
 
-  echo "./SRC/SIFs/${RUN}.sif" >> test.txt
+  echo "./SRC/SIFs/${RUN}.sif" >> Inputs.txt
   # # Execute the .SIF file via "ElmerSolver"
   # docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic; \
   #                                   ElmerSolver ./SRC/SIFs/${RUN}.sif \

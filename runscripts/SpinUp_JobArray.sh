@@ -3,6 +3,8 @@
 #SBATCH --job-name=SpinUp_2000a_dt_1_dx_100_       # base job name for the array
 #SBATCH --mem=50                                   # maximum 100M per job
 #SBATCH --time=0:30:00                             # maximum walltime per job
+#SBATCH --mail-type=ALL                            # send all mail (way to much)
+#SBATCH --mail-user=andrew.d.nolan@maine.edu       # email to spend updates too
 #SBATCH --output=logs/myprog%A%a.out               # standard output
 #SBATCH --error=logs/myprog%A%a.err                # standard error
 # in the previous two lines %A" is replaced by jobID and "%a" with the array index
@@ -27,7 +29,7 @@ pip install --no-index -r $HOME/requirements.txt
 
 
 # Get the fp to a .sif file
-SIF=$(  sed -n "${SLURM_ARRAY_TASK_ID}p" test.txt)
+SIF=$(  sed -n "${SLURM_ARRAY_TASK_ID}p" Inputs.txt)
 # Get the corresponding python call to clean surface boundary data
 CLEAN=$(sed -n "${SLURM_ARRAY_TASK_ID}p" Outputs.txt)
 
@@ -39,17 +41,3 @@ $CLEAN
 
 # Get rid of the sif file to reduce clutter
 rm $SIF
-
-
-# for SLURM_ARRAY_TASK_ID in $(seq 1 51); do
-#   SIF=$(sed -n "${SLURM_ARRAY_TASK_ID}p" test.txt)
-#   CLEAN=$(sed -n "${SLURM_ARRAY_TASK_ID}p" Outputs.txt)
-#
-#   echo '------------------------------------------------------------------------'
-#   echo
-#   echo "ElmerSolver $SIF > logs/${SIF##*/}.log"
-#   echo
-#   echo $CLEAN
-#   echo
-#   echo rm $SIF
-#   echo
