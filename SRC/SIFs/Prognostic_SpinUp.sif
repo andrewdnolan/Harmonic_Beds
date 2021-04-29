@@ -206,7 +206,7 @@ Solver 4
   !  Stabilization Method = [Stabilized,P2/P1,Bubbles]
   Stabilization Method                     = String "Bubbles"
 
-  Nonlinear System Convergence Tolerance   = 1.0E-05
+  Nonlinear System Convergence Tolerance   = 1.0E-03
   Nonlinear System Convergence Measure     = Solution
   Nonlinear System Max Iterations          = 25 ! 1 try without non-lin iters
   Nonlinear System Newton After Iterations = 3

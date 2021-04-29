@@ -17,8 +17,9 @@
 
 # Ignore all the compiled code
 bin/*
-
-# Plots
+# Ignore the log files
+logs/
+# Ignore the plots
 plots/
 *.png
 *.pdf

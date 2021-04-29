@@ -8,10 +8,10 @@ TT=$((NT*dt-dt))                        # total time of simulation
 SIF='./SRC/SIFs/Prognostic_SpinUp.sif'  # Template SIF FILE
 BED='Farinotti_smooth'                  # Mesh DB for the given bed config
 
-#for OFFSET in $(seq -w 0.00 0.10 2.51);do
-for OFFSET in $(seq -w 2.07 0.01 2.07); do
+for OFFSET in $(seq -w 2.07 0.01 2.07);do
+#for OFFSET in $(seq -w 2.07 0.01 2.07); do
   # Model RUN identifier
-  RUN="LK_PRE_${TT}a_dx_100_MB_${OFFSET}_OFF"
+  RUN="LK_PRE_${TT}a_dt_${dt}_dx_100_MB_${OFFSET}_OFF"
 
   # Update the .SIF FILE with the model run specifc params
   sed 's#^$NT = [^ ]*#$NT = '"${NT}"'#;
@@ -20,22 +20,23 @@ for OFFSET in $(seq -w 2.07 0.01 2.07); do
        s#^\$BED = [^ ]*#\$BED = "'"${BED}"'"#;
        s#^$offset = [^ ]*#\$offset = '"${OFFSET}"'#;' "$SIF" > "./SRC/SIFs/${RUN}.sif"
 
-  # Execute the .SIF file via "ElmerSolver"
-  docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic; \
-                                    ElmerSolver ./SRC/SIFs/${RUN}.sif \
-                                  | tee ./logs/Exp_01_elevation_dependent/${RUN}.log"
-
-  # Clean the boundary data and convert from .dat to .nc
-  python3 ./SRC/utils/dat2h5.py \
+  echo "./SRC/SIFs/${RUN}.sif" >> test.txt
+  # # Execute the .SIF file via "ElmerSolver"
+  # docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic; \
+  #                                   ElmerSolver ./SRC/SIFs/${RUN}.sif \
+  #                                 | tee ./logs/Exp_01_elevation_dependent/${RUN}.log"
+  #
+  # # Clean the boundary data and convert from .dat to .nc
+  echo python3 ./SRC/utils/dat2h5.py \
           ./Synthetic/${BED}/Exp_01_elevation_dependent/SaveData/${RUN}.dat \
           -out_dir ./Synthetic/${BED}/Exp_01_elevation_dependent/hdf5 \
           -Nx 284 \
           -dt $dt \
           -offset $OFFSET \
-          -SpinUp
-
-  # Remove the edited SIF to reduce clutter
-  rm ./SRC/SIFs/${RUN}.sif
+          -SpinUp  >> Outputs.txt
+  #
+  # # Remove the edited SIF to reduce clutter
+  # rm ./SRC/SIFs/${RUN}.sif
 done
 
 #

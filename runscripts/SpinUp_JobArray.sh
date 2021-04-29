@@ -1,0 +1,55 @@
+#!/bin/bash
+#SBATCH --array=1-51                               # 50 jobs
+#SBATCH --job-name=SpinUp_2000a_dt_1_dx_100_       # base job name for the array
+#SBATCH --mem=50                                   # maximum 100M per job
+#SBATCH --time=0:30:00                             # maximum walltime per job
+#SBATCH --output=logs/myprog%A%a.out               # standard output
+#SBATCH --error=logs/myprog%A%a.err                # standard error
+# in the previous two lines %A" is replaced by jobID and "%a" with the array index
+
+###############################################################################
+#######################            Load ENV             #######################
+###############################################################################
+# Load Elmer
+module load gcc/9.3.0
+module load elmerfem/scc20
+
+# Load python 3
+module load python/3.6
+
+# Creating virtual environments inside of your jobs
+virtualenv --no-download $SLURM_TMPDIR/env
+source $SLURM_TMPDIR/env/bin/activate
+
+pip install --no-index --upgrade pip
+pip install --no-index -r $HOME/requirements.txt
+###############################################################################
+
+
+# Get the fp to a .sif file
+SIF=$(  sed -n "${SLURM_ARRAY_TASK_ID}p" test.txt)
+# Get the corresponding python call to clean surface boundary data
+CLEAN=$(sed -n "${SLURM_ARRAY_TASK_ID}p" Outputs.txt)
+
+# Execute the .sif file
+ElmerSolver $SIF > logs/${SIF##*/}.log
+
+# Clean the data using the `dat2h5.py` script
+$CLEAN
+
+# Get rid of the sif file to reduce clutter
+rm $SIF
+
+
+# for SLURM_ARRAY_TASK_ID in $(seq 1 51); do
+#   SIF=$(sed -n "${SLURM_ARRAY_TASK_ID}p" test.txt)
+#   CLEAN=$(sed -n "${SLURM_ARRAY_TASK_ID}p" Outputs.txt)
+#
+#   echo '------------------------------------------------------------------------'
+#   echo
+#   echo "ElmerSolver $SIF > logs/${SIF##*/}.log"
+#   echo
+#   echo $CLEAN
+#   echo
+#   echo rm $SIF
+#   echo
