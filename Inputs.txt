@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ./SRC/SIFs/observed_3000a_dt_1_dx_100_mb_2.400_off.sif
 ./SRC/SIFs/smoothbed_3000a_dt_1_dx_100_mb_2.400_off.sif
 ./SRC/SIFs/observed_3000a_dt_1_dx_100_mb_2.401_off.sif
@@ -20,3 +21,16 @@
 ./SRC/SIFs/smoothbed_3000a_dt_1_dx_100_mb_2.409_off.sif
 ./SRC/SIFs/observed_3000a_dt_1_dx_100_mb_2.410_off.sif
 ./SRC/SIFs/smoothbed_3000a_dt_1_dx_100_mb_2.410_off.sif
+=======
+./SRC/SIFs/LK_PRE_3000a_dt_1_dx_100_MB_2.400_OFF.sif
+./SRC/SIFs/LK_PRE_3000a_dt_1_dx_100_MB_2.401_OFF.sif
+./SRC/SIFs/LK_PRE_3000a_dt_1_dx_100_MB_2.402_OFF.sif
+./SRC/SIFs/LK_PRE_3000a_dt_1_dx_100_MB_2.403_OFF.sif
+./SRC/SIFs/LK_PRE_3000a_dt_1_dx_100_MB_2.404_OFF.sif
+./SRC/SIFs/LK_PRE_3000a_dt_1_dx_100_MB_2.405_OFF.sif
+./SRC/SIFs/LK_PRE_3000a_dt_1_dx_100_MB_2.406_OFF.sif
+./SRC/SIFs/LK_PRE_3000a_dt_1_dx_100_MB_2.407_OFF.sif
+./SRC/SIFs/LK_PRE_3000a_dt_1_dx_100_MB_2.408_OFF.sif
+./SRC/SIFs/LK_PRE_3000a_dt_1_dx_100_MB_2.409_OFF.sif
+./SRC/SIFs/LK_PRE_3000a_dt_1_dx_100_MB_2.410_OFF.sif
+>>>>>>> a56d35d605cff61107d60d1929a66bd1249d87a2

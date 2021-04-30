@@ -2,13 +2,13 @@
 
 SECONDS=0
 
-NT=2001                                 # Number of time step
+NT=3001                                 # Number of time step
 dt=1                                    # size of timestep
 TT=$((NT*dt-dt))                        # total time of simulation
 SIF='./SRC/SIFs/Prognostic_SpinUp.sif'  # Template SIF FILE
 BED='farinotti_smooth'                  # Mesh DB for the given bed config
 
-for OFFSET in $(seq -w 2.00 0.01 2.50);do
+for OFFSET in $(seq -w 2.40 0.001 2.41);do
   
   # Model RUN identifier
   RUN="LK_PRE_${TT}a_dt_${dt}_dx_100_MB_${OFFSET}_OFF"

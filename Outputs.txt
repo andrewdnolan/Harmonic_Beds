@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 python3 ./SRC/utils/dat2h5.py ./Synthetic/hystersis/Observed_IC/SaveData/observed_3000a_dt_1_dx_100_mb_2.400_off.dat -out_dir ./Synthetic/hystersis/Observed_IC/hdf5 -Nx 284 -dt 1 -offset 2.400 -SpinUp
 python3 ./SRC/utils/dat2h5.py ./Synthetic/hystersis/SmoothBed_SS_IC/SaveData/smoothbed_3000a_dt_1_dx_100_mb_2.400_off.dat -out_dir ./Synthetic/hystersis/SmoothBed_SS_IC/hdf5 -Nx 284 -dt 1 -offset 2.400 -SpinUp
 python3 ./SRC/utils/dat2h5.py ./Synthetic/hystersis/Observed_IC/SaveData/observed_3000a_dt_1_dx_100_mb_2.401_off.dat -out_dir ./Synthetic/hystersis/Observed_IC/hdf5 -Nx 284 -dt 1 -offset 2.401 -SpinUp
@@ -20,3 +21,16 @@ python3 ./SRC/utils/dat2h5.py ./Synthetic/hystersis/Observed_IC/SaveData/observe
 python3 ./SRC/utils/dat2h5.py ./Synthetic/hystersis/SmoothBed_SS_IC/SaveData/smoothbed_3000a_dt_1_dx_100_mb_2.409_off.dat -out_dir ./Synthetic/hystersis/SmoothBed_SS_IC/hdf5 -Nx 284 -dt 1 -offset 2.409 -SpinUp
 python3 ./SRC/utils/dat2h5.py ./Synthetic/hystersis/Observed_IC/SaveData/observed_3000a_dt_1_dx_100_mb_2.410_off.dat -out_dir ./Synthetic/hystersis/Observed_IC/hdf5 -Nx 284 -dt 1 -offset 2.410 -SpinUp
 python3 ./SRC/utils/dat2h5.py ./Synthetic/hystersis/SmoothBed_SS_IC/SaveData/smoothbed_3000a_dt_1_dx_100_mb_2.410_off.dat -out_dir ./Synthetic/hystersis/SmoothBed_SS_IC/hdf5 -Nx 284 -dt 1 -offset 2.410 -SpinUp
+=======
+python3 ./SRC/utils/dat2h5.py ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/SaveData/lk_pre_3000a_dt_1_dx_100_mb_2.400_off.dat -out_dir ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/hdf5 -Nx 284 -dt 1 -offset 2.400 -SpinUp
+python3 ./SRC/utils/dat2h5.py ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/SaveData/lk_pre_3000a_dt_1_dx_100_mb_2.401_off.dat -out_dir ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/hdf5 -Nx 284 -dt 1 -offset 2.401 -SpinUp
+python3 ./SRC/utils/dat2h5.py ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/SaveData/lk_pre_3000a_dt_1_dx_100_mb_2.402_off.dat -out_dir ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/hdf5 -Nx 284 -dt 1 -offset 2.402 -SpinUp
+python3 ./SRC/utils/dat2h5.py ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/SaveData/lk_pre_3000a_dt_1_dx_100_mb_2.403_off.dat -out_dir ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/hdf5 -Nx 284 -dt 1 -offset 2.403 -SpinUp
+python3 ./SRC/utils/dat2h5.py ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/SaveData/lk_pre_3000a_dt_1_dx_100_mb_2.404_off.dat -out_dir ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/hdf5 -Nx 284 -dt 1 -offset 2.404 -SpinUp
+python3 ./SRC/utils/dat2h5.py ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/SaveData/lk_pre_3000a_dt_1_dx_100_mb_2.405_off.dat -out_dir ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/hdf5 -Nx 284 -dt 1 -offset 2.405 -SpinUp
+python3 ./SRC/utils/dat2h5.py ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/SaveData/lk_pre_3000a_dt_1_dx_100_mb_2.406_off.dat -out_dir ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/hdf5 -Nx 284 -dt 1 -offset 2.406 -SpinUp
+python3 ./SRC/utils/dat2h5.py ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/SaveData/lk_pre_3000a_dt_1_dx_100_mb_2.407_off.dat -out_dir ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/hdf5 -Nx 284 -dt 1 -offset 2.407 -SpinUp
+python3 ./SRC/utils/dat2h5.py ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/SaveData/lk_pre_3000a_dt_1_dx_100_mb_2.408_off.dat -out_dir ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/hdf5 -Nx 284 -dt 1 -offset 2.408 -SpinUp
+python3 ./SRC/utils/dat2h5.py ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/SaveData/lk_pre_3000a_dt_1_dx_100_mb_2.409_off.dat -out_dir ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/hdf5 -Nx 284 -dt 1 -offset 2.409 -SpinUp
+python3 ./SRC/utils/dat2h5.py ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/SaveData/lk_pre_3000a_dt_1_dx_100_mb_2.410_off.dat -out_dir ./Synthetic/farinotti_smooth/exp_01_elevation_dependent/hdf5 -Nx 284 -dt 1 -offset 2.410 -SpinUp
+>>>>>>> a56d35d605cff61107d60d1929a66bd1249d87a2
