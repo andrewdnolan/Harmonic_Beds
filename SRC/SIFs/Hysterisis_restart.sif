@@ -137,13 +137,13 @@ Initial Condition 2
   Zbed  = Variable Coordinate 1
          Real
           !include  "./Data/Topography/REF_BedTopo.dat"
-          include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
+          include "./Data/Topography/pert_r_0.01_harmonics_1-10.dat"
          End
 
   Bottom Surface = Variable Coordinate 1
          Real
          !include  "./Data/Topography/REF_BedTopo.dat"
-         include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
+         include "./Data/Topography/pert_r_0.01_harmonics_1-10.dat"
          End
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -359,13 +359,13 @@ Boundary Condition 1
   Zbed                       = Variable Coordinate 1
                                Real
                                 !include  "./Data/Topography/REF_BedTopo.dat"
-                                include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
+                                include "./Data/Topography/pert_r_0.01_harmonics_1-10.dat"
                                End
 
   Bottom Surface             = Variable Coordinate 1
                                Real
                                 !include  "./Data/Topography/REF_BedTopo.dat"
-                                include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
+                                include "./Data/Topography/pert_r_0.01_harmonics_1-10.dat"
                                End
 End
 
