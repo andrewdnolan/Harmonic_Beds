@@ -16,9 +16,9 @@ $offset = 0.0
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 Header
   CHECK KEYWORDS Warn
-  Mesh DB           "./Synthetic/"$BED"/Observed_IC/" "mesh_dx100"   !\"
-  Include Path      "./Synthetic/"$BED"/Observed_IC"                 !\"
-  Results Directory "./Synthetic/"$BED"/Observed_IC"                 !\"
+  Mesh DB           "./Synthetic/"$BED"/observed_ic/" "mesh_dx100"   !\"
+  Include Path      "./Synthetic/"$BED"/observed_ic"                 !\"
+  Results Directory "./Synthetic/"$BED"/observed_ic"                 !\"
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! END HEADER
@@ -273,8 +273,8 @@ Solver 6
   Exec Solver      = "before timestep"
   Procedure        = "SaveData" "SaveLine"
   Exec Interval    = 1
-  Filename         = "/SaveData/"$RUN".dat"
-  Output Directory = "./Synthetic/"$BED"/Observed_IC/"
+  Filename         = "SaveData/"$RUN".dat"
+  Output Directory = "./Synthetic/"$BED"/observed_ic"
   !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Variable 1       = String "zs"
   Variable 2       = String "zbed"

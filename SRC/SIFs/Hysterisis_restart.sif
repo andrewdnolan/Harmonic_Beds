@@ -16,9 +16,9 @@ $offset = 0.0
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 Header
   CHECK KEYWORDS Warn
-  Mesh DB           "./Synthetic/"$BED"/SmoothBed_SS_IC/" "mesh_dx100"   !\"
-  Include Path      "./Synthetic/"$BED"/SmoothBed_SS_IC"                 !\"
-  Results Directory "./Synthetic/"$BED"/SmoothBed_SS_IC"                 !\"
+  Mesh DB           "./Synthetic/"$BED"/smoothbed_ss_ic/" "mesh_dx100"   !\"
+  Include Path      "./Synthetic/"$BED"/smoothbed_ss_ic"                 !\"
+  Results Directory "./Synthetic/"$BED"/smoothbed_ss_ic"                 !\"
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! END HEADER
@@ -60,7 +60,7 @@ Simulation
   !Output File                 = "$RUN".result"           !\"
   Post File                   = "VTU/$RUN".vtu"              !\"
   Max Output Level            = 3
-  Restart File                = "LK_PRE_2002a_MB_2.41_OFF.result"
+  Restart File                = "LK_PRE_3000a_dt_1_dx_100_MB_2.406_OFF.result"
   Restart Position            = 0
   Restart Time                = Real 0.0
   Restart Before Initial Conditions = Logical False
@@ -272,8 +272,8 @@ Solver 6
   Exec Solver      = "before timestep"
   Procedure        = "SaveData" "SaveLine"
   Exec Interval    = 1
-  Filename         = "/SaveData/"$RUN".dat"
-  Output Directory = "./Synthetic/"$BED"/SmoothBed_SS_IC/"
+  Filename         = "SaveData/"$RUN".dat"
+  Output Directory = "./Synthetic/"$BED"/smoothbed_ss_ic"
   !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Variable 1       = String "zs"
   Variable 2       = String "zbed"

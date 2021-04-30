@@ -38,14 +38,14 @@ for RUN in "observed_IC" "smoothBed_SS_IC"; do
   fi
 done
 
-for OFFSET in $(seq -w 2.35 0.01 2.45); do
+for OFFSET in $(seq -w 2.40 0.001 2.41);do
   echo
   echo "--------------------------------------------------------------------------"
   echo "% Running Observed_IC with ${OFFSET} offset"
   echo "--------------------------------------------------------------------------"
   echo
 
-  RUN="lk_pre_${TT}a_dt_${dt}_dx_100_mb_${OFFSET}_off"
+  RUN="observed_${TT}a_dt_${dt}_dx_100_mb_${OFFSET}_off"
   EXP='observed_ic'
   BED='hystersis'
   # Update the .SIF FILE with the model run specifc params
@@ -65,8 +65,8 @@ for OFFSET in $(seq -w 2.35 0.01 2.45); do
 
   # Clean the boundary data and convert from .dat to .nc
   echo python3 ./SRC/utils/dat2h5.py \
-          ./Synthetic/${BED}/Observed_IC/SaveData/${RUN}.dat \
-          -out_dir ./Synthetic/${BED}/Observed_IC/hdf5 \
+          ./Synthetic/${BED}/observed_ic/SaveData/${RUN}.dat \
+          -out_dir ./Synthetic/${BED}/observed_ic/hdf5 \
           -Nx 284 \
           -dt $dt \
           -offset $OFFSET \
@@ -82,8 +82,8 @@ for OFFSET in $(seq -w 2.35 0.01 2.45); do
   echo "--------------------------------------------------------------------------"
   echo
 
-  RUN="lk_pre_${TT}a_dt_${dt}_dx_100_mb_${OFFSET}_off"
-  EXP='smoothBed_ss_ic'
+  RUN="smoothbed_${TT}a_dt_${dt}_dx_100_mb_${OFFSET}_off"
+  EXP='smoothbed_ss_ic'
   BED='hystersis'
 
   # Update the .SIF FILE with the model run specifc params
@@ -103,8 +103,8 @@ for OFFSET in $(seq -w 2.35 0.01 2.45); do
 
   # Clean the boundary data and convert from .dat to .nc
   echo python3 ./SRC/utils/dat2h5.py \
-          ./Synthetic/${BED}/SmoothBed_SS_IC/SaveData/${RUN}.dat \
-          -out_dir ./Synthetic/${BED}/SmoothBed_SS_IC/hdf5 \
+          ./Synthetic/${BED}/smoothbed_ss_ic/SaveData/${RUN}.dat \
+          -out_dir ./Synthetic/${BED}/smoothbed_ss_ic/hdf5 \
           -Nx 284 \
           -dt $dt \
           -offset $OFFSET \
