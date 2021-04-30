@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --array=1-51%10                            # 50 jobs that run 10 at a time
 #SBATCH --job-name=SpinUp_2000a_dt_1_dx_100_       # base job name for the array
-#SBATCH --mem-per-cpu=150                          # maximum 150M per job
-#SBATCH --time=0:45:00                             # maximum walltime per job
+#SBATCH --mem-per-cpu=250                          # maximum 150M per job
+#SBATCH --time=1:00:00                             # maximum walltime per job
 #SBATCH --nodes=1                                  # Only one node is needed
 #SBATCH --ntasks=1                                 # These are serial jobs
 #SBATCH --mail-type=ALL                            # send all mail (way to much)
