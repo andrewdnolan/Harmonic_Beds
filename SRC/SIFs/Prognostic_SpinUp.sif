@@ -265,6 +265,7 @@ Solver 6
   Exec Solver      = "before timestep"
   Procedure        = "SaveData" "SaveLine"
   Exec Interval    = 1
+  File Append      = Logical Flase
   Filename         = "/SaveData/"$RUN".dat"
   Output Directory = "./Synthetic/"$BED"/Exp_01_elevation_dependent/"
   !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
