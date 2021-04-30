@@ -16,9 +16,9 @@ $offset = 0.0
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 Header
   CHECK KEYWORDS Warn
-  Mesh DB           "./Synthetic/"$BED"/SmoothBed_SS_IC/" "mesh"   !\"
-  Include Path      "./Synthetic/"$BED"/SmoothBed_SS_IC"          !\"
-  Results Directory "./Synthetic/"$BED"/SmoothBed_SS_IC"          !\"
+  Mesh DB           "./Synthetic/"$BED"/SmoothBed_SS_IC/" "mesh_dx100"   !\"
+  Include Path      "./Synthetic/"$BED"/SmoothBed_SS_IC"                 !\"
+  Results Directory "./Synthetic/"$BED"/SmoothBed_SS_IC"                 !\"
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! END HEADER
