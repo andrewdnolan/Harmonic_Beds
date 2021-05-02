@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name="quick test"                    # base job name for the array
-#SBATCH --mem=150                                   # maximum 500M per job
-#SBATCH --time=0:45:00                             # maximum walltime per job
+#SBATCH --job-name="forgot line 22"                # base job name for the array
+#SBATCH --mem=300                                  # maximum 500M per job
+#SBATCH --time=4:00:00                             # maximum walltime per job
 #SBATCH --mail-type=ALL                            # send all mail (way to much)
 #SBATCH --mail-user=andrew.d.nolan@maine.edu       # email to spend updates too
 # in the previous two lines %A" is replaced by jobID and "%a" with the array index
@@ -25,9 +25,9 @@ pip install --no-index -r $HOME/requirements.txt
 ###############################################################################
 
 # Get the fp to a .sif file
-SIF=$(  sed -n "51p" Inputs.txt)
+SIF=$(  sed -n "22p" Inputs.txt)
 # Get the corresponding python call to clean surface boundary data
-CLEAN=$(sed -n "51p" Outputs.txt)
+CLEAN=$(sed -n "22p" Outputs.txt)
 
 # Execute the .sif file
 ElmerSolver $SIF > logs/${SIF##*/}.log

@@ -38,7 +38,7 @@ for RUN in "observed_IC" "smoothBed_SS_IC"; do
   fi
 done
 
-for OFFSET in $(seq -w 2.40 0.001 2.41);do
+for OFFSET in $(seq -w 2.00 0.01 2.50);do
   echo
   echo "--------------------------------------------------------------------------"
   echo "% Running Observed_IC with ${OFFSET} offset"
