@@ -16,9 +16,9 @@ $offset = 0.0
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 Header
   CHECK KEYWORDS Warn
-  Mesh DB           "./Synthetic/"$BED"/smoothbed_ss_ic/" "mesh_dx100"   !\"
-  Include Path      "./Synthetic/"$BED"/smoothbed_ss_ic"                 !\"
-  Results Directory "./Synthetic/"$BED"/smoothbed_ss_ic"                 !\"
+  Mesh DB           "./Synthetic/<RAT>/<BED>/<EXP>/" "mesh_dx100"   !\"
+  Include Path      "./Synthetic/<RAT>/<BED>/<EXP>"                 !\"
+  Results Directory "./Synthetic/<RAT>/<BED>/<EXP>"                 !\"
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! END HEADER
@@ -29,7 +29,7 @@ End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 Constants
   Stefan Boltzmann    = 5.67e-08                    ![W m^−2 K^−4]
-  Mass Balance Offset = real $offset                ![m a^-1]
+  Mass Balance Offset = real <OFFSET>               ![m a^-1]
   gamma               = real -1.0e-05               ![ ] sklearn SVR hyperparameter
   intercept           = real -1.2393076753413321    ![m a^-1] MB SVR intercept
 End
@@ -53,12 +53,12 @@ Simulation
   ! initial conditions. Therefore, we add one extra timestep to make sure
   ! we have a full N number simulation timesteps
   $output_intervals           = 501
-  Timestep Sizes              = $dt
-  Timestep Intervals          = $NT
-  Output Intervals            = $NT
+  Timestep Sizes              = <dt>
+  Timestep Intervals          = <NT>
+  Output Intervals            = <NT>
 
-  !Output File                 = "$RUN".result"           !\"
-  Post File                   = "VTU/$RUN".vtu"              !\"
+  !Output File                 = "<RUN>".result"           !\"
+  Post File                   = "VTU/<RUN>".vtu"              !\"
   Max Output Level            = 3
   Restart File                = "LK_PRE_3000a_dt_1_dx_100_MB_2.406_OFF.result"
   Restart Position            = 0
@@ -137,13 +137,13 @@ Initial Condition 2
   Zbed  = Variable Coordinate 1
          Real
           !include  "./Data/Topography/REF_BedTopo.dat"
-          include "./Data/Topography/pert_r_0.01_harmonics_1-10.dat"
+          include "<BED_FP>"
          End
 
   Bottom Surface = Variable Coordinate 1
          Real
          !include  "./Data/Topography/REF_BedTopo.dat"
-         include "./Data/Topography/pert_r_0.01_harmonics_1-10.dat"
+         include "<BED_FP>"
          End
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -213,10 +213,10 @@ Solver 4
   !  Stabilization Method = [Stabilized,P2/P1,Bubbles]
   Stabilization Method                     = String "Bubbles"
 
-  Nonlinear System Convergence Tolerance   = 1.0E-05
+  Nonlinear System Convergence Tolerance   = 1.0E-5
   Nonlinear System Convergence Measure     = Solution
   Nonlinear System Max Iterations          = 25 ! 1 try without non-lin iters
-  Nonlinear System Newton After Iterations = 3
+  Nonlinear System Newton After Iterations = 15
   Nonlinear System Newton After Tolerance  = 1.0E-03
   Nonlinear System Reset Newton            = Logical True
   Exported Variable 1                      = -dofs 2 "Mesh Velocity"
@@ -273,7 +273,7 @@ Solver 6
   Procedure        = "SaveData" "SaveLine"
   Exec Interval    = 1
   Filename         = "SaveData/"$RUN".dat"
-  Output Directory = "./Synthetic/"$BED"/smoothbed_ss_ic"
+  Output Directory = "./Synthetic/<RAT>/<BED>/<EXP>"
   !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Variable 1       = String "zs"
   Variable 2       = String "zbed"
@@ -358,14 +358,16 @@ Boundary Condition 1
 
   Zbed                       = Variable Coordinate 1
                                Real
-                                !include  "./Data/Topography/REF_BedTopo.dat"
-                                include "./Data/Topography/pert_r_0.01_harmonics_1-10.dat"
+                                !include "./Data/Topography/REF_BedTopo.dat"
+                                !include "./Data/Topography/pert_r_0.01_harmonics_1-10.dat"
+                                include "<BED_FP>"
                                End
 
   Bottom Surface             = Variable Coordinate 1
                                Real
                                 !include  "./Data/Topography/REF_BedTopo.dat"
-                                include "./Data/Topography/pert_r_0.01_harmonics_1-10.dat"
+                                !include "./Data/Topography/pert_r_0.01_harmonics_1-10.dat"
+                                include "<BED_FP>"
                                End
 End
 
