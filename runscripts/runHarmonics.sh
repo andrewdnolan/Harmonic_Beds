@@ -10,7 +10,7 @@ set +x
 R=0.01
 
 # Elmer Run parameters
-NT=3001                                              # Number of time step
+NT=2001                                              # Number of time step
 dt=1                                                 # size of timestep
 SIF='./SRC/SIFs/Hysterisis_restart.sif'              # Template SIF FILE
 EXP="Exp_01_elevation_dependent"
