@@ -11,7 +11,7 @@
 
 
 grdfile="./Mesh/Synthetic.grd"
-bedfile="./Data/Topography/REF_BedTopo.dat"
+bedfile="./Data/Topography/SMOOTH_BedTopo.dat"
 
 
 start=$(awk 'NR==1 {print $1}' $bedfile)
@@ -21,11 +21,13 @@ start=$(awk 'NR==1 {print $1}' $bedfile)
 #  then back solve for the appropriate number of x-gridcells (Nx)
 
 # Set the gridcell spacing to 100 m
-dx=100
+dx=$2
 
 # We'll use awk to do this calculation. Wow thats complicated
 # for such a simple calc.  ¯\_(ツ)_/¯
 Nx=$(awk -v L=$end -v dx=$dx 'BEGIN {OFMT = "%.0f"; print (L/dx)}')
+
+echo $Nx
 
 update_grd () {
   # To match scientific notation see here:

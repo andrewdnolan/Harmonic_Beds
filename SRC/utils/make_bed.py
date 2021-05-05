@@ -97,6 +97,11 @@ def main(argv):
     N       = int(args.harmonics)       # [ ]   How many harmonics to computes
     ratio   = float(args.ratio)         # [m/m] ratio of amplitude to wavelength
     sum     = args.sum                  # Whether to compute the full series
+
+    print('////////////////////////?///////////////////////')
+    print('Value of sum is:', sum)
+    print('////////////////////////?///////////////////////')
+
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     #                             LOAD INPUT DATA
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -110,7 +115,7 @@ def main(argv):
     z_pertb = z + z_prime
 
     # Write the perturbed bed to a file
-    np.savetxt(out_fp, np.array([x, z_pertb]).T, fmt='%.3e')
+    np.savetxt(out_fp, np.array([x, z_pertb]).T, fmt='%.6e')
 
 if __name__ == '__main__':
     main(sys.argv[1:])

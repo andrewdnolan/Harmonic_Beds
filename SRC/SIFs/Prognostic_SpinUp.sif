@@ -7,6 +7,7 @@
 ! Variable updated via the bash run file
 $NT = 10
 $dt = 2.0
+$dx = 100
 $RUN = "Begin_Course_test"
 $BED = "Farinotti_smooth"
 $offset = 0.0
@@ -16,9 +17,9 @@ $offset = 0.0
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 Header
   CHECK KEYWORDS Warn
-  Mesh DB           "./Synthetic/"$BED"/Exp_01_elevation_dependent/" "mesh_dx100"   !\"
-  Include Path      "./Synthetic/"$BED"/Exp_01_elevation_dependent"          !\"
-  Results Directory "./Synthetic/"$BED"/Exp_01_elevation_dependent"          !\"
+  Mesh DB           "./Synthetic/"$BED"/" "mesh_dx<DX>"   !\"
+  Include Path      "./Synthetic/"$BED""          !\"
+  Results Directory "./Synthetic/"$BED""          !\"
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! END HEADER
@@ -121,21 +122,25 @@ End
 Initial Condition 2
   Zs    = Variable Coordinate 1
           Real cubic
-           include  "./Data/Topography/REF_SurfTopo.dat"
+           !include  "./Data/Topography/REF_SurfTopo.dat"
+           include  "./Data/Topography/SMOOTH_SurfTopo.dat"
           End
   RefZs = Variable Coordinate 1
           Real cubic
-           include  "./Data/Topography/REF_SurfTopo.dat"
+           !include  "./Data/Topography/REF_SurfTopo.dat"
+           include  "./Data/Topography/SMOOTH_SurfTopo.dat"
           End
   Zbed  = Variable Coordinate 1
          Real
-          include  "./Data/Topography/REF_BedTopo.dat"
+          !include  "./Data/Topography/REF_BedTopo.dat"
+          include  "./Data/Topography/SMOOTH_BedTopo.dat"
           !include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
          End
 
   Bottom Surface = Variable Coordinate 1
          Real
-         include  "./Data/Topography/REF_BedTopo.dat"
+         !include  "./Data/Topography/REF_BedTopo.dat"
+         include  "./Data/Topography/SMOOTH_BedTopo.dat"
          !include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
          End
 End
@@ -267,7 +272,7 @@ Solver 6
   Exec Interval    = 1
   File Append      = Logical False
   Filename         = "/SaveData/"$RUN".dat"
-  Output Directory = "./Synthetic/"$BED"/Exp_01_elevation_dependent/"
+  Output Directory = "./Synthetic/"$BED""
   !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Variable 1       = String "zs"
   Variable 2       = String "zbed"
@@ -352,13 +357,15 @@ Boundary Condition 1
 
   Zbed                       = Variable Coordinate 1
                                Real
-                                include  "./Data/Topography/REF_BedTopo.dat"
+                                !include  "./Data/Topography/REF_BedTopo.dat"
+                                include  "./Data/Topography/SMOOTH_BedTopo.dat"
                                 !include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
                                End
 
   Bottom Surface             = Variable Coordinate 1
                                Real
-                                include  "./Data/Topography/REF_BedTopo.dat"
+                                !include  "./Data/Topography/REF_BedTopo.dat"
+                                include  "./Data/Topography/SMOOTH_BedTopo.dat"
                                 !include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
                                End
 End
@@ -366,8 +373,9 @@ End
 Boundary Condition 2
   Name                       = "sides"
   Target Boundaries(2)       = 3 4
-  !Velocity 1                 = Real 0.0e0
-  depth                      = Real 0.0
+  Velocity 1                 = Real 0.0e0
+  ! Velocity 2                 = Real 0.0e0
+  ! depth                      = Real 0.0
 End
 
 Boundary Condition 3
