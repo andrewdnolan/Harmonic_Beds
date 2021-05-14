@@ -11,7 +11,7 @@
 
 
 grdfile="./Mesh/Synthetic.grd"
-bedfile="./Data/Topography/SMOOTH_BedTopo.dat"
+bedfile="./Data/Topography/REF_BedTopo_2.dat"
 
 
 start=$(awk 'NR==1 {print $1}' $bedfile)
@@ -36,7 +36,7 @@ update_grd () {
   # https://stackoverflow.com/questions/19456518/invalid-command-code-despite-escaping-periods-using-sed
   # Replace xmin and xmax inline for the input source .grd file
   sed -i 's/^Subcell Limits 1 =.*/Subcell Limits 1 = '"${1} ${2}"'/;
-                s/^Element Divisions 1 =.*/Element Divisions 1 = '"${3}"'/' "${4}"
+          s/^Element Divisions 1 =.*/Element Divisions 1 = '"${3}"'/' "${4}"
 }
 update_grd $start $end $Nx $grdfile
 

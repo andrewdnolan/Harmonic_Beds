@@ -17,9 +17,9 @@ $offset = 0.0
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 Header
   CHECK KEYWORDS Warn
-  Mesh DB           "./Synthetic/"$BED"/" "mesh_dx<DX>"   !\"
-  Include Path      "./Synthetic/"$BED""          !\"
-  Results Directory "./Synthetic/"$BED""          !\"
+  Mesh DB           "./Synthetic/<BED>/<EXP>/" "mesh_dx<DX>"    !\"
+  Include Path      "./Synthetic/<BED>/<EXP>"                   !\"
+  Results Directory "./Synthetic/<BED>/<EXP>"                   !\"
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! END HEADER
@@ -30,7 +30,7 @@ End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 Constants
   Stefan Boltzmann    = 5.67e-08                    ![W m^−2 K^−4]
-  Mass Balance Offset = real $offset                ![m a^-1]
+  Mass Balance Offset = real <OFFSET>               ![m a^-1]
   gamma               = real -1.0e-05               ![ ] sklearn SVR hyperparameter
   intercept           = real -1.2393076753413321    ![m a^-1] MB SVR intercept
 End
@@ -54,14 +54,15 @@ Simulation
   ! initial conditions. Therefore, we add one extra timestep to make sure
   ! we have a full N number simulation timesteps
   $output_intervals           = 25
-  Timestep Sizes              = $dt
-  Timestep Intervals          = $NT
-  Output Intervals            = $output_intervals
+  Timestep Sizes              = <dt>
+  Timestep Intervals          = <NT>
+  Output Intervals            = 1
 
-  Output File                 = "$RUN".result"               !\"
-  Post File                   = "VTU/$RUN".vtu"              !\"
+  Output File                 = "<RUN>".result"               !\"
+  Post File                   = "VTU/<RUN>".vtu"              !\"
   Max Output Level            = 3
 
+  Convergence Monitor         = Logical True
   Initialize Dirichlet Conditions = Logical False
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -102,7 +103,7 @@ End
 
 Equation 2
   Name               = "Equation2"
-  Convection         = "computed" !!! CHANGE TO THIS ONE TO GET REASONABLE RESULTS
+  Convection         = "computed"
   Active Solvers(1)  = 5
   Flow Solution Name = String "Flow Solution"
 End
@@ -123,24 +124,28 @@ Initial Condition 2
   Zs    = Variable Coordinate 1
           Real cubic
            !include  "./Data/Topography/REF_SurfTopo.dat"
-           include  "./Data/Topography/SMOOTH_SurfTopo.dat"
+           include  "./Data/Topography/REF_SurfTopo_2.dat"
+           !include  "./Data/Topography/SMOOTH_SurfTopo.dat"
           End
   RefZs = Variable Coordinate 1
           Real cubic
            !include  "./Data/Topography/REF_SurfTopo.dat"
-           include  "./Data/Topography/SMOOTH_SurfTopo.dat"
+           include  "./Data/Topography/REF_SurfTopo_2.dat"
+           !include  "./Data/Topography/SMOOTH_SurfTopo.dat"
           End
   Zbed  = Variable Coordinate 1
          Real
           !include  "./Data/Topography/REF_BedTopo.dat"
-          include  "./Data/Topography/SMOOTH_BedTopo.dat"
+          include  "./Data/Topography/REF_BedTopo_2.dat"
+          !include  "./Data/Topography/SMOOTH_BedTopo.dat"
           !include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
          End
 
   Bottom Surface = Variable Coordinate 1
          Real
          !include  "./Data/Topography/REF_BedTopo.dat"
-         include  "./Data/Topography/SMOOTH_BedTopo.dat"
+         include  "./Data/Topography/REF_BedTopo_2.dat"
+         !include "./Data/Topography/SMOOTH_BedTopo.dat"
          !include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
          End
 End
@@ -238,6 +243,7 @@ Solver 5
    ! by upper and/or lower limits (see material section above)
    ! using a variational inequality formulation
    Apply Dirichlet                         = Logical True
+   !Apply Limiter                           = Logical True
 
    Linear System Solver                    = Iterative
    Linear System Iterative Method          = BiCGStab
@@ -253,8 +259,9 @@ Solver 5
 
    Steady State Convergence Tolerance      = 1.0e-3
 
-   Stabilization Method                    = Stabilized
-
+   !Stabilization Method                    = Stabilized
+   Stabilization Method                    = String "Bubbles"
+   
    ! Needed to update the Accumulation b/w itterations
    Nonlinear Update Exported Variables     = Logical True
    ! needed for evaluating the contact pressure
@@ -271,8 +278,8 @@ Solver 6
   Procedure        = "SaveData" "SaveLine"
   Exec Interval    = 1
   File Append      = Logical False
-  Filename         = "/SaveData/"$RUN".dat"
-  Output Directory = "./Synthetic/"$BED""
+  Filename         = "/SaveData/<RUN>.dat"
+  Output Directory = "./Synthetic/<BED>/<EXP>"
   !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Variable 1       = String "zs"
   Variable 2       = String "zbed"
@@ -310,7 +317,7 @@ End
 
 Material 2
   Min Zs                     = Variable Zbed
-                               Real lua "tx[0] + 1.0"
+                               Real lua "tx[0] + 10.0"
   Max Zs                     = Variable Zbed
                                Real lua "tx[0] + 10000.0"
 End
@@ -338,6 +345,11 @@ Body Force 2
   !                              End
   Zs Accumulation Flux 2     = Variable Coordinate 2
                                 Real Procedure "./bin/accumulation" "getAccumulation"
+
+  ! Min Zs                     = Variable Zbed
+  !                              Real lua "tx[0] + 10.0"
+  ! Max Zs                     = Variable Zbed
+  !                              Real lua "tx[0] + 10000.0"
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! END BODY FORCE
@@ -358,33 +370,46 @@ Boundary Condition 1
   Zbed                       = Variable Coordinate 1
                                Real
                                 !include  "./Data/Topography/REF_BedTopo.dat"
-                                include  "./Data/Topography/SMOOTH_BedTopo.dat"
+                                include  "./Data/Topography/REF_BedTopo_2.dat"
+                                !include  "./Data/Topography/SMOOTH_BedTopo.dat"
                                 !include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
                                End
 
   Bottom Surface             = Variable Coordinate 1
                                Real
                                 !include  "./Data/Topography/REF_BedTopo.dat"
-                                include  "./Data/Topography/SMOOTH_BedTopo.dat"
+                                include  "./Data/Topography/REF_BedTopo_2.dat"
+                                !include  "./Data/Topography/SMOOTH_BedTopo.dat"
                                 !include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
                                End
 End
 
 Boundary Condition 2
-  Name                       = "sides"
-  Target Boundaries(2)       = 3 4
-  Velocity 1                 = Real 0.0e0
-  ! Velocity 2                 = Real 0.0e0
-  ! depth                      = Real 0.0
-End
-
-Boundary Condition 3
   Name                       = "surface"
   Depth                      = real 0.0
   Top Surface                = Equals "Zs"
   Target Boundaries          = 2
   Body ID                    = 2 !!! THIS IS ESSENTIAL
   Save Line                  = Logical True
+End
+
+
+Boundary Condition 3
+  Name                       = "Head"
+  Body ID                    = 1 !!! THIS IS ESSENTIAL
+  Target Boundaries          = 3
+  ! Top Surface                = Equals "RefZs"
+  ! Apply Dirichlet Condition at upper margin
+  !Zs Accumulation Flux 2     = Real 0.0e0
+  Velocity 1                 = Real 0.0e0
+  !Velocity 2                 = Real 0.0e0
+  ! Mesh Velocity 2            = Real 0.0e0
+  ! Height                     = Real 10.0
+End
+
+Boundary Condition 4
+  Name                       = "Front"
+  Target Boundaries          = 4
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! END BOUNDARY CONDITIONs

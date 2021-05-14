@@ -14,7 +14,7 @@ def vm(vx, vy):
     """Calculate vel. magnitude from x and y component"""
     return np.sqrt(vx**2 + vy**2)
 
-def correct_zs_mask(H, H_min=1.0, axis=1):
+def correct_zs_mask(H, H_min=10.0, axis=1):
     """Return mask for Valid ice thickness:
         This function will check that the ice thicknes is greater then threshold,
         and that the ice thickness is continous. In effect, this will ensure that
