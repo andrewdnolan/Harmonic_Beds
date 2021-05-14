@@ -2,7 +2,7 @@
 
 SECONDS=0
 
-NT=2000                                  # Number of time step
+NT=2001                                 # Number of time step
 dt=1                                    # size of timestep
 dx=100                                  # Grid cell spacing
 TT=$((NT*dt-dt))                        # total time of simulation
