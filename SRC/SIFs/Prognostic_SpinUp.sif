@@ -62,7 +62,7 @@ Simulation
   Post File                   = "VTU/<RUN>".vtu"              !\"
   Max Output Level            = 3
 
-  Convergence Monitor         = Logical True
+  !Convergence Monitor         = Logical True
   Initialize Dirichlet Conditions = Logical False
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
