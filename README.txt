@@ -3,10 +3,14 @@
 
 __To Do __:
 
-  - [ ] Rerun $\Delta \dot b$ grid search on 100 $\rm{m}$ grid on WestGrid
-    - Probably will need to decrease the time-step to 1 $\rm{y}$ for numerical
-      stability/convergence since the grid spacing was refined.
-    -
-
   - [ ] Some convergence study of the iterative solver and the best preconditioners
         would be really helpful in speeding up the runs (maybe...)
+
+  - [ ] Can you avoid the reverse bed-slope at headwall node by tweaking the
+        surface and bed profiles ever so slightly?
+        - Making the bed slope steeper at the top node might help prevent the
+          reverse surface slope.
+
+  - [ ] For some reason the spin-up runs no longer write the initial condition
+        for t=0. Why is this? I know they were before, I don't think anythings
+        changed which would have affected this?? 

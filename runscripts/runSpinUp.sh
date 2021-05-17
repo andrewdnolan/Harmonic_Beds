@@ -10,7 +10,7 @@ SIF='./SRC/SIFs/Prognostic_SpinUp.sif'  # Template SIF FILE
 BED='farinotti_corrected'               # Mesh DB for the given bed config
 EXP="exp_01_elevation_dependent"
 
-for OFFSET in $(seq -w 1.90 0.01 2.00);do
+for OFFSET in $(seq -w 1.90 0.01 2.10);do
 
   # Model RUN identifier
   RUN="LK_PRE_${TT}a_dt_${dt}_dx_100_MB_${OFFSET}_OFF"
@@ -28,28 +28,23 @@ for OFFSET in $(seq -w 1.90 0.01 2.00);do
 
   echo "./SRC/SIFs/${RUN}.sif" >> Inputs.txt
 
-  # Execute the .SIF file via "ElmerSolver"
+  # # Execute the .SIF file via "ElmerSolver"
   # docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic; \
   #                                   ElmerSolver ./SRC/SIFs/${RUN}.sif \
   #                                 | tee ./logs/Exp_01_elevation_dependent/${RUN}.log"
 
   # # Clean the boundary data and convert from .dat to .nc
-  python3 ./SRC/utils/dat2h5.py \
+  echo python3 ./SRC/utils/dat2h5.py \
           ./Synthetic/${BED}/exp_01_elevation_dependent/SaveData/${RUN}.dat \
           -out_dir ./Synthetic/${BED}/exp_01_elevation_dependent/hdf5 \
           -Nx 279 \
           -dt $dt \
           -offset $OFFSET \
-          -SpinUp #>> Outputs.txt
+          -SpinUp >> Outputs.txt
   #
   # # Remove the edited SIF to reduce clutter
   # rm ./SRC/SIFs/${RUN}.sif
 done
-
-#
-# ELAPSED="Elapsed: $(($SECONDS / 3600))hrs $((($SECONDS / 60) % 60))min $(($SECONDS % 60))sec"
-#
-# echo $ELAPSED
 
 # # After the full grid search of parameters lets make a plot showing  the convergence
 # python SRC/plot_convergence.py ./Synthetic/Exp_01_elevation_dependent/hdf5
