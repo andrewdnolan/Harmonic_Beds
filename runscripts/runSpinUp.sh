@@ -34,13 +34,13 @@ for OFFSET in $(seq -w 1.90 0.01 2.00);do
   #                                 | tee ./logs/Exp_01_elevation_dependent/${RUN}.log"
 
   # # Clean the boundary data and convert from .dat to .nc
-  echo python3 ./SRC/utils/dat2h5.py \
+  python3 ./SRC/utils/dat2h5.py \
           ./Synthetic/${BED}/exp_01_elevation_dependent/SaveData/${RUN}.dat \
           -out_dir ./Synthetic/${BED}/exp_01_elevation_dependent/hdf5 \
           -Nx 279 \
           -dt $dt \
           -offset $OFFSET \
-          -SpinUp >> Outputs.txt
+          -SpinUp #>> Outputs.txt
   #
   # # Remove the edited SIF to reduce clutter
   # rm ./SRC/SIFs/${RUN}.sif
