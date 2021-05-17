@@ -249,17 +249,34 @@ Solver 6
   Parameter 1   =  String "Slip Coefficient 2"
 End
 
+! Solver 7
+!   ! Get the depth averaged velocity
+!   Equation              = "StructuredProjectToPlane"
+!   Exec Solver           = Before TimeStep
+!   Procedure             = File "StructuredProjectToPlane" "StructuredProjectToPlane"
+!   Active Coordinate     = Integer 2
+!   Project to Everewhere = Logical True
+!   Variable 1            = String "Velocity 1"
+!   Operator 1            = String "sum"
+!   Variable 2            = String "Velocity 2"
+!   Operator 2            = String "sum"
+! End
+
 Solver 7
-  ! Get the depth averaged velocity
-  Equation              = "StructuredProjectToPlane"
-  Exec Solver           = Before TimeStep
-  Procedure             = File "StructuredProjectToPlane" "StructuredProjectToPlane"
-  Active Coordinate     = Integer 2
-  Project to Everewhere = Logical True
-  Variable 1            = String "Velocity 1"
-  Operator 1            = String "sum"
-  Variable 2            = String "Velocity 2"
-  Operator 2            = String "sum"
+  Equation                           = "Integrated Velocity"
+  Procedure                          = File "ElmerIceSolvers" "IntegratedVelocity"
+  ! Velocity variables will be automatically found from the the flow solver
+  Variable                           = -nooutput -dofs 1 "PlaceHolder"
+  Exported Variable 1                = -dofs 1  "Integrated Velocity"
+
+  !Flow Solver Name = String "Flow Solution"
+  On Surface                         = Logical True
+  Compute Flux                       = Logical False
+
+  Linear System Solver               = Direct
+  Linear System Direct Method        = umfpack
+
+  Steady State Convergence Tolerance = Real 1.0e-3
 End
 
 Solver 8
