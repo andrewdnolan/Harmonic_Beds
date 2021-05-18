@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --array=1-21                               # 10 jobs that run 10 at a time
+#SBATCH --array=1-21%10                            # 10 jobs that run 10 at a time
 #SBATCH --job-name=SpinUp_2000a_dt_1_dx_100_       # base job name for the array
 #SBATCH --mem-per-cpu=150                          # maximum 150M per job
 #SBATCH --time=1:00:00                             # maximum walltime per job
