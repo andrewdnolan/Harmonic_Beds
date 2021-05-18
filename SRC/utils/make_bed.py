@@ -98,10 +98,6 @@ def main(argv):
     ratio   = float(args.ratio)         # [m/m] ratio of amplitude to wavelength
     sum     = args.sum                  # Whether to compute the full series
 
-    print('////////////////////////?///////////////////////')
-    print('Value of sum is:', sum)
-    print('////////////////////////?///////////////////////')
-
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     #                             LOAD INPUT DATA
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

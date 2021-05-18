@@ -372,19 +372,23 @@ Boundary Condition 1
 End
 
 Boundary Condition 2
-  Name                       = "sides"
-  Target Boundaries(2)       = 3 4
-  !Velocity 1                 = Real 0.0e0
-  depth                      = Real 0.0
-End
-
-Boundary Condition 3
   Name                       = "surface"
   Depth                      = real 0.0
   Top Surface                = Equals "Zs"
   Target Boundaries          = 2
   Body ID                    = 2 !!! THIS IS ESSENTIAL
   Save Line                  = Logical True
+End
+
+Boundary Condition 3
+  Name                       = "Head Wall"
+  Target Boundaries          = 3
+  Zs                         = Equals "Zbed"
+End
+
+Boundary Condition 4
+  Name                       = "Front"
+  Target Boundaries          = 4
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! END BOUNDARY CONDITIONs

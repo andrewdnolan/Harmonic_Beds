@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# hystersis.sh:
+#   - Numerical experiments to determine Z_s(x) sensitivity to IC with our
+#     preturbed (harmonic) bed
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 set +x
 
 BED="Data/Topography/pert_r_0.01_harmonics_1-10.dat"
@@ -17,7 +23,7 @@ fi
 # perturb the bed with first 10 harmonics of the series
 # (i.e. evaluate the series from 1 to 10)
 python3 ./SRC/utils/make_bed.py \
-        -B Data/Topography/REF_BedTopo.dat \
+        -B Data/Topography/REF_BedTopo_2.dat \
         -O $BED \
         -H 215.0 \
         -N 10    \
@@ -48,6 +54,7 @@ for OFFSET in $(seq -w 2.00 0.01 2.50);do
   RUN="observed_${TT}a_dt_${dt}_dx_100_mb_${OFFSET}_off"
   EXP='observed_ic'
   BED='hystersis'
+
   # Update the .SIF FILE with the model run specifc params
   sed 's#^$NT = [^ ]*#$NT = '"${NT}"'#;
        s#^$dt = [^ ]*#$dt = '"${dt}"'#;
