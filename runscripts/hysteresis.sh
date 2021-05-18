@@ -49,20 +49,20 @@ python3 ./SRC/utils/make_bed.py \
 for IC in "observed_IC" "smoothBed_SS_IC"; do
 
   # Set up neccessary directory structure and make mesh
-  if [ ! -d "Synthetic/${BED}/Hystersis/${IC}" ]; then
+  if [ ! -d "Synthetic/${BED}/${EXP}/${IC}" ]; then
 
-    mkdir "Synthetic/${BED}/Hystersis/${IC}"            # Make dir for IC
-    mkdir "Synthetic/${BED}/Hystersis/${IC}/SaveData"   # Elmer .dat files folders
-    mkdir "Synthetic/${BED}/Hystersis/${IC}/VTU"        # folder for VTU files
-    mkdir "Synthetic/${BED}/Hystersis/${IC}/hdf5"       # folder for .nc files
+    mkdir "Synthetic/${BED}/${EXP}/${IC}"            # Make dir for IC
+    mkdir "Synthetic/${BED}/${EXP}/${IC}/SaveData"   # Elmer .dat files folders
+    mkdir "Synthetic/${BED}/${EXP}/${IC}/VTU"        # folder for VTU files
+    mkdir "Synthetic/${BED}/${EXP}/${IC}/hdf5"       # folder for .nc files
 
     if [ "$DOCKER" = true ]; then
       # Make mesh within Docker environment
       docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic; \
-                                       ./Mesh/makemsh.sh Synthetic/${BED}/Hystersis/${IC}/mesh_dx100 100"
+                                       ./Mesh/makemsh.sh Synthetic/${BED}/${EXP}/${IC}/mesh_dx100 100"
     else
       # Make mesh driectly
-      ./Mesh/makemsh.sh Synthetic/${BED}/Hystersis/${IC}/mesh_dx100 100
+      ./Mesh/makemsh.sh "Synthetic/${BED}/${EXP}/${IC}/mesh_dx100" 100
     fi
 
   fi
