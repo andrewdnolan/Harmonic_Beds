@@ -9,6 +9,7 @@
 *.TIFF
 *.npy
 *.pkl
+*.zip
 
 # Include these since they are needed for all the model runs
 !Data/Topography/REF*

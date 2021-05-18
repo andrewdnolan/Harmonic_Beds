@@ -13,4 +13,9 @@ __To Do __:
 
   - [ ] For some reason the spin-up runs no longer write the initial condition
         for t=0. Why is this? I know they were before, I don't think anythings
-        changed which would have affected this?? 
+        changed which would have affected this??
+
+  - [ ] Set Scripts up to take command line flag, whether running in docker or
+        westgrid so don't need to comment things in/out when you want to swtich
+        where you are runnning. 
+        2686024
