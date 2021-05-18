@@ -170,7 +170,7 @@ Solver 1
   Linear System Preconditioning            = ILU1
   Linear System Convergence Tolerance      = 1.0e-06
 
-  Nonlinear System Max Iterations          = 5
+  Nonlinear System Max Iterations          = 1
   Nonlinear System Convergence Tolerance   = 1.0e-06
 End
 
