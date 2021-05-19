@@ -19,7 +19,7 @@ dt=1                                                    # size of timestep
 TT=$((NT*dt-dt))                                        # total time of simulation
 
 
-DOCKER=true
+DOCKER=false
 WESTGRID=false
 
 # Make top dir if it does not exist
