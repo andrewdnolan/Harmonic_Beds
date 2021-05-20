@@ -118,12 +118,12 @@ End
 Initial Condition 2
   Zs    = Variable Coordinate 1
           Real cubic
-            include  "./Data/Topography/REF_SurfTopo_2.dat"
+            include  "./Data/Topography/REF_SurfTopo_2_dx50.dat"
             !include  "./Data/Topography/REF_SurfTopo.dat"
           End
   RefZs = Variable Coordinate 1
           Real cubic
-            include  "./Data/Topography/REF_SurfTopo_2.dat"
+            include  "./Data/Topography/REF_SurfTopo_2_dx50.dat"
             !include  "./Data/Topography/REF_SurfTopo.dat"
           End
 

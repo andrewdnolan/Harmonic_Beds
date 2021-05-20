@@ -24,7 +24,7 @@ WESTGRID=false
 
 # Make top dir if it does not exist
 if [ ! -d "Synthetic/${BED}/dx${dx}/${EXP}" ]; then
-  mkdir Synthetic/${BED}/${EXP}
+  mkdir Synthetic/dx${dx}/${BED}/${EXP}
 fi
 # Clean the input  file so we can create a new one with commands specifc
 if [ -f Inputs.txt ]; then
@@ -61,7 +61,7 @@ for IC in "observed_IC" "smoothBed_SS_IC"; do
     if [ "$DOCKER" = true ]; then
       # Make mesh within Docker environment
       docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic; \
-                                       ./Mesh/makemsh.sh Synthetic/$${OUT_FP}/mesh_dx100 ${dx}"
+                                       ./Mesh/makemsh.sh Synthetic/${OUT_FP}/mesh_dx${dx} ${dx}"
     else
       # Make mesh driectly
       ./Mesh/makemsh.sh "Synthetic/${OUT_FP}/mesh_dx${dx}" $dx
@@ -79,7 +79,7 @@ for IC in "observed_IC" "smoothBed_SS_IC"; do
   fi
 
 
-  for OFFSET in $(seq -w 1.90 0.01 2.00);do
+  for OFFSET in $(seq -w 1.90 0.01 2.05);do
     echo
     echo "--------------------------------------------------------------------------"
     echo "% Running ${IC} with ${OFFSET} offset"
