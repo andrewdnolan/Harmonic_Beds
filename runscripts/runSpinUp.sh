@@ -18,10 +18,10 @@ EXP="exp_01_elevation_dependent"        # Experiment (folder) name
 OUT_FP="${BED}/dx${dx}/${EXP}"          # Output File Path
 
 
-for OFFSET in $(seq -w 1.90 0.01 2.00);do
+for OFFSET in $(seq -w 2.00 0.01 2.05);do
 
   # Model RUN identifier
-  RUN="LK_PRE_${TT}a_dt_${dt}_dx_100_MB_${OFFSET}_OFF"
+  RUN="LK_PRE_${TT}a_dt_${dt}_dx_${dx}_MB_${OFFSET}_OFF"
 
   # Update the .SIF FILE with the model run specifc params
   sed "s#<NT>#"$NT"#g;

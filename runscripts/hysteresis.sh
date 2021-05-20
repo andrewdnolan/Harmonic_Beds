@@ -8,22 +8,22 @@
 
 set +x
 
+dt=1                                                    # size of timestep
+dx=50                                                   # Grid cell spacing
+NT=2001                                                 # Number of time step
+TT=$((NT*dt-dt))                                        # total time of simulation
+
 EXP='hysteresis'                                        # Experiment (folder) name
 BED='farinotti_corrected'                               # Mesh DB for the given bed config
 SIF='./SRC/SIFs/Hysterisis_norestart.sif'               # Template SIF FILE
 BED_FP="Data/Topography/pert_r_0.01_harmonics_01-10.dat"
 
 
-NT=3001                                                 # Number of time step
-dt=1                                                    # size of timestep
-TT=$((NT*dt-dt))                                        # total time of simulation
-
-
 DOCKER=true
 WESTGRID=false
 
 # Make top dir if it does not exist
-if [ ! -d "Synthetic/${BED}/${EXP}" ]; then
+if [ ! -d "Synthetic/${BED}/dx${dx}/${EXP}" ]; then
   mkdir Synthetic/${BED}/${EXP}
 fi
 # Clean the input  file so we can create a new one with commands specifc
@@ -38,31 +38,33 @@ fi
 # perturb the bed with first 10 harmonics of the series
 # (i.e. evaluate the series from 1 to 10)
 python3 ./SRC/utils/make_bed.py \
-        -B Data/Topography/REF_BedTopo_2.dat \
+        -B Data/Topography/REF_BedTopo_2_dx50.dat \
         -O $BED_FP \
-        -H 200.0   \
-        -N 10      \
+        -H 100.0   \
+        -N 15      \
         -R 0.01    \
         --sum
 
 
 for IC in "observed_IC" "smoothBed_SS_IC"; do
 
-  # Set up neccessary directory structure and make mesh
-  if [ ! -d "Synthetic/${BED}/${EXP}/${IC}" ]; then
+  OUT_FP="${BED}/dx${dx}/${EXP}/${IC}"
 
-    mkdir "Synthetic/${BED}/${EXP}/${IC}"            # Make dir for IC
-    mkdir "Synthetic/${BED}/${EXP}/${IC}/SaveData"   # Elmer .dat files folders
-    mkdir "Synthetic/${BED}/${EXP}/${IC}/VTU"        # folder for VTU files
-    mkdir "Synthetic/${BED}/${EXP}/${IC}/hdf5"       # folder for .nc files
+  # Set up neccessary directory structure and make mesh
+  if [ ! -d "Synthetic/${OUT_FP}" ]; then
+
+    mkdir "Synthetic/${OUT_FP}"            # Make dir for IC
+    mkdir "Synthetic/${OUT_FP}/SaveData"   # Elmer .dat files folders
+    mkdir "Synthetic/${OUT_FP}/VTU"        # folder for VTU files
+    mkdir "Synthetic/${OUT_FP}/hdf5"       # folder for .nc files
 
     if [ "$DOCKER" = true ]; then
       # Make mesh within Docker environment
       docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic; \
-                                       ./Mesh/makemsh.sh Synthetic/${BED}/${EXP}/${IC}/mesh_dx100 100"
+                                       ./Mesh/makemsh.sh Synthetic/$${OUT_FP}/mesh_dx100 ${dx}"
     else
       # Make mesh driectly
-      ./Mesh/makemsh.sh "Synthetic/${BED}/${EXP}/${IC}/mesh_dx100" 100
+      ./Mesh/makemsh.sh "Synthetic/${OUT_FP}/mesh_dx${dx}" $dx
     fi
 
   fi
@@ -77,15 +79,14 @@ for IC in "observed_IC" "smoothBed_SS_IC"; do
   fi
 
 
-  for OFFSET in $(seq -w 1.90 0.01 2.10);do
+  for OFFSET in $(seq -w 1.90 0.01 2.00);do
     echo
     echo "--------------------------------------------------------------------------"
     echo "% Running ${IC} with ${OFFSET} offset"
     echo "--------------------------------------------------------------------------"
     echo
 
-    RUN="${IC}_${TT}a_dt_${dt}_dx_100_mb_${OFFSET}_off"
-    OUT_FP="${BED}/${EXP}/${IC}"
+    RUN="${IC}_${TT}a_dt_${dt}_dx_${dx}_mb_${OFFSET}_off"
 
     # Update the .SIF FILE with the model run specifc params
     sed "s#<NT>#"$NT"#g;
@@ -107,7 +108,7 @@ for IC in "observed_IC" "smoothBed_SS_IC"; do
     echo python3 ./SRC/utils/dat2h5.py \
             ./Synthetic/${OUT_FP}/SaveData/${RUN}.dat \
             -out_dir ./Synthetic/${OUT_FP}/hdf5 \
-            -Nx 279 \
+            -Nx 555 \
             -dt $dt \
             -offset $OFFSET \
             -SpinUp >> Outputs.txt
