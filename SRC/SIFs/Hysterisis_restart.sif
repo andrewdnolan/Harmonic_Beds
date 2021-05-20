@@ -53,7 +53,7 @@ Simulation
   Output File                 = "<RUN>".result"               !\"
   Post File                   = "VTU/<RUN>".vtu"              !\"
   Max Output Level            = 3
-  Restart File                = "LK_PRE_2000a_dt_1_dx_100_MB_2.01_OFF.result"
+  Restart File                = "LK_PRE_2000a_dt_1_dx_50_MB_2.01_OFF.result"
   Restart Position            = 0
   Restart Time                = Real 0.0
   Restart Before Initial Conditions = Logical False

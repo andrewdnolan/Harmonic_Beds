@@ -19,12 +19,12 @@ SIF='./SRC/SIFs/Hysterisis_norestart.sif'               # Template SIF FILE
 BED_FP="Data/Topography/pert_r_0.01_harmonics_01-10.dat"
 
 
-DOCKER=true
-WESTGRID=false
+DOCKER=false
+WESTGRID=true
 
 # Make top dir if it does not exist
 if [ ! -d "Synthetic/${BED}/dx${dx}/${EXP}" ]; then
-  mkdir Synthetic/dx${dx}/${BED}/${EXP}
+  mkdir Synthetic/${BED}/dx${dx}/${EXP}
 fi
 # Clean the input  file so we can create a new one with commands specifc
 if [ -f Inputs.txt ]; then
