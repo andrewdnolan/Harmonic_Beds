@@ -9,3 +9,8 @@
 ./SRC/SIFs/LK_PRE_2000a_dt_1_dx_100_MB_1.98_OFF.sif
 ./SRC/SIFs/LK_PRE_2000a_dt_1_dx_100_MB_1.99_OFF.sif
 ./SRC/SIFs/LK_PRE_2000a_dt_1_dx_100_MB_2.00_OFF.sif
+./SRC/SIFs/LK_PRE_2000a_dt_1_dx_50_MB_2.01_OFF.sif
+./SRC/SIFs/LK_PRE_2000a_dt_1_dx_50_MB_2.02_OFF.sif
+./SRC/SIFs/LK_PRE_2000a_dt_1_dx_50_MB_2.03_OFF.sif
+./SRC/SIFs/LK_PRE_2000a_dt_1_dx_50_MB_2.04_OFF.sif
+./SRC/SIFs/LK_PRE_2000a_dt_1_dx_50_MB_2.05_OFF.sif
