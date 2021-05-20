@@ -4,22 +4,14 @@
 #rhoi      = 910.0                                  ![kg m^-3]
 #rhow      = 1000.0                                 ![kg m^-3]
 
-! Variable updated via the bash run file
-$NT = 10
-$dt = 2.0
-$dx = 100
-$RUN = "Begin_Course_test"
-$BED = "Farinotti_smooth"
-$offset = 0.0
-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! BEGIN HEADER
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 Header
   CHECK KEYWORDS Warn
-  Mesh DB           "./Synthetic/<BED>/<EXP>/" "mesh_dx<DX>"    !\"
-  Include Path      "./Synthetic/<BED>/<EXP>"                   !\"
-  Results Directory "./Synthetic/<BED>/<EXP>"                   !\"
+  Mesh DB           "./Synthetic/<OUT_FP>/" "mesh_dx<DX>"    !\"
+  Include Path      "./Synthetic/<OUT_FP>"                   !\"
+  Results Directory "./Synthetic/<OUT_FP>"                   !\"
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! END HEADER
@@ -124,21 +116,21 @@ Initial Condition 2
   Zs    = Variable Coordinate 1
           Real
            !include  "./Data/Topography/REF_SurfTopo.dat"
-           include  "./Data/Topography/REF_SurfTopo_2.dat"
+           include  "./Data/Topography/REF_SurfTopo_2_dx50.dat"
            !include  "./Data/Topography/SMOOTH_SurfTopo.dat"
           End
 
   RefZs = Variable Coordinate 1
           Real
            !include  "./Data/Topography/REF_SurfTopo.dat"
-           include  "./Data/Topography/REF_SurfTopo_2.dat"
+           include  "./Data/Topography/REF_SurfTopo_2_dx50.dat"
            !include  "./Data/Topography/SMOOTH_SurfTopo.dat"
           End
 
   Zbed  = Variable Coordinate 1
          Real
           !include  "./Data/Topography/REF_BedTopo.dat"
-          include  "./Data/Topography/REF_BedTopo_2.dat"
+          include  "./Data/Topography/REF_BedTopo_2_dx50.dat"
           !include  "./Data/Topography/SMOOTH_BedTopo.dat"
           !include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
          End
@@ -146,7 +138,7 @@ Initial Condition 2
   Bottom Surface = Variable Coordinate 1
          Real
          !include  "./Data/Topography/REF_BedTopo.dat"
-         include  "./Data/Topography/REF_BedTopo_2.dat"
+         include  "./Data/Topography/REF_BedTopo_2_dx50.dat"
          !include "./Data/Topography/SMOOTH_BedTopo.dat"
          !include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
          End
@@ -281,7 +273,7 @@ Solver 6
   Exec Interval    = 1
   File Append      = Logical False
   Filename         = "/SaveData/<RUN>.dat"
-  Output Directory = "./Synthetic/<BED>/<EXP>"
+  Output Directory = "./Synthetic/<OUT_FP>"
   !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Variable 1       = String "zs"
   Variable 2       = String "zbed"
@@ -371,7 +363,7 @@ Boundary Condition 1
   Zbed                       = Variable Coordinate 1
                                Real
                                 !include  "./Data/Topography/REF_BedTopo.dat"
-                                include  "./Data/Topography/REF_BedTopo_2.dat"
+                                include  "./Data/Topography/REF_BedTopo_2_dx50.dat"
                                 !include  "./Data/Topography/SMOOTH_BedTopo.dat"
                                 !include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
                                End
@@ -379,7 +371,7 @@ Boundary Condition 1
   Bottom Surface             = Variable Coordinate 1
                                Real
                                 !include  "./Data/Topography/REF_BedTopo.dat"
-                                include  "./Data/Topography/REF_BedTopo_2.dat"
+                                include  "./Data/Topography/REF_BedTopo_2_dx50.dat"
                                 !include  "./Data/Topography/SMOOTH_BedTopo.dat"
                                 !include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
                                End

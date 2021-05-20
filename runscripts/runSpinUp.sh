@@ -1,16 +1,24 @@
 #!/bin/bash
 
-SECONDS=0
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# runSpinUp.sh:
+#   - Mass balance grid-search to find steady state positions
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-NT=2001                                 # Number of time step
+set +x
+
 dt=1                                    # size of timestep
-dx=100                                  # Grid cell spacing
+dx=50                                   # Grid cell spacing
+NT=2001                                 # Number of time step
 TT=$((NT*dt-dt))                        # total time of simulation
+
 SIF='./SRC/SIFs/Prognostic_SpinUp.sif'  # Template SIF FILE
 BED='farinotti_corrected'               # Mesh DB for the given bed config
-EXP="exp_01_elevation_dependent"
+EXP="exp_01_elevation_dependent"        # Experiment (folder) name
+OUT_FP="${BED}/dx${dx}/${EXP}"          # Output File Path
 
-for OFFSET in $(seq -w 1.90 0.01 2.10);do
+
+for OFFSET in $(seq -w 2.00 0.01 2.00);do
 
   # Model RUN identifier
   RUN="LK_PRE_${TT}a_dt_${dt}_dx_100_MB_${OFFSET}_OFF"
@@ -19,9 +27,8 @@ for OFFSET in $(seq -w 1.90 0.01 2.10);do
   sed "s#<NT>#"$NT"#g;
        s#<dt>#"$dt"#g;
        s#<DX>#"$dx"#g;
-       s#<EXP>#"$EXP"#g;
-       s#<BED>#"$BED"#g;
        s#<RUN>#"$RUN"#g;
+       s#<OUT_FP>#"$OUT_FP"#g;
        s#<OFFSET>#"$OFFSET"#g" "$SIF" > "./SRC/SIFs/${RUN}.sif"
   #    s#<BED_FP>#"$BED_FP"#g;
 
@@ -35,9 +42,9 @@ for OFFSET in $(seq -w 1.90 0.01 2.10);do
 
   # # Clean the boundary data and convert from .dat to .nc
   echo python3 ./SRC/utils/dat2h5.py \
-          ./Synthetic/${BED}/exp_01_elevation_dependent/SaveData/${RUN}.dat \
-          -out_dir ./Synthetic/${BED}/exp_01_elevation_dependent/hdf5 \
-          -Nx 279 \
+          ./Synthetic/${OUT_FP}/SaveData/${RUN}.dat \
+          -out_dir ./Synthetic/${OUT_FP}/hdf5 \
+          -Nx 555 \
           -dt $dt \
           -offset $OFFSET \
           -SpinUp >> Outputs.txt

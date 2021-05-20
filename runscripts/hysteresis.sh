@@ -11,7 +11,7 @@ set +x
 EXP='hysteresis'                                        # Experiment (folder) name
 BED='farinotti_corrected'                               # Mesh DB for the given bed config
 SIF='./SRC/SIFs/Hysterisis_norestart.sif'               # Template SIF FILE
-BED_FP="Data/Topography/pert_r_0.01_harmonics_1-10.dat"
+BED_FP="Data/Topography/pert_r_0.01_harmonics_01-10.dat"
 
 
 NT=3001                                                 # Number of time step

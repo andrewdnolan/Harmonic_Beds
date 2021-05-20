@@ -40,3 +40,7 @@ python3 ./SRC/utils/dat2h5.py ./Synthetic/farinotti_corrected/hystersis/smoothBe
 python3 ./SRC/utils/dat2h5.py ./Synthetic/farinotti_corrected/hystersis/smoothBed_SS_IC/SaveData/smoothBed_SS_IC_3000a_dt_1_dx_100_mb_2.08_off.dat -out_dir ./Synthetic/farinotti_corrected/hystersis/smoothBed_SS_IC/hdf5 -Nx 279 -dt 1 -offset 2.08 -SpinUp
 python3 ./SRC/utils/dat2h5.py ./Synthetic/farinotti_corrected/hystersis/smoothBed_SS_IC/SaveData/smoothBed_SS_IC_3000a_dt_1_dx_100_mb_2.09_off.dat -out_dir ./Synthetic/farinotti_corrected/hystersis/smoothBed_SS_IC/hdf5 -Nx 279 -dt 1 -offset 2.09 -SpinUp
 python3 ./SRC/utils/dat2h5.py ./Synthetic/farinotti_corrected/hystersis/smoothBed_SS_IC/SaveData/smoothBed_SS_IC_3000a_dt_1_dx_100_mb_2.10_off.dat -out_dir ./Synthetic/farinotti_corrected/hystersis/smoothBed_SS_IC/hdf5 -Nx 279 -dt 1 -offset 2.10 -SpinUp
+------------------------------------------------------------------------------------------------------------
+% NetCDF file written to: 
+% ./Synthetic/farinotti_corrected/dx50/exp_01_elevation_dependent/hdf5/LK_PRE_2000a_dt_1_dx_100_MB_2.00_OFF.nc
+------------------------------------------------------------------------------------------------------------
