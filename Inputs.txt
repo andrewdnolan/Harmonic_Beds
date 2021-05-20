@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ./SRC/SIFs/LK_PRE_2000a_dt_1_dx_100_MB_1.90_OFF.sif
 ./SRC/SIFs/LK_PRE_2000a_dt_1_dx_100_MB_1.91_OFF.sif
 ./SRC/SIFs/LK_PRE_2000a_dt_1_dx_100_MB_1.92_OFF.sif
@@ -9,6 +10,8 @@
 ./SRC/SIFs/LK_PRE_2000a_dt_1_dx_100_MB_1.98_OFF.sif
 ./SRC/SIFs/LK_PRE_2000a_dt_1_dx_100_MB_1.99_OFF.sif
 ./SRC/SIFs/LK_PRE_2000a_dt_1_dx_100_MB_2.00_OFF.sif
+=======
+>>>>>>> ab847599fe741604d8106bf0b331ea1cea125a24
 ./SRC/SIFs/LK_PRE_2000a_dt_1_dx_50_MB_2.01_OFF.sif
 ./SRC/SIFs/LK_PRE_2000a_dt_1_dx_50_MB_2.02_OFF.sif
 ./SRC/SIFs/LK_PRE_2000a_dt_1_dx_50_MB_2.03_OFF.sif
