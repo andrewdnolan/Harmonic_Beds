@@ -80,17 +80,13 @@ for IC in "observed_IC" "smoothBed_SS_IC"; do
 
 
   for OFFSET in $(seq -w 1.90 0.01 2.05);do
-    echo
-    echo "--------------------------------------------------------------------------"
-    echo "% Running ${IC} with ${OFFSET} offset"
-    echo "--------------------------------------------------------------------------"
-    echo
 
     RUN="${IC}_${TT}a_dt_${dt}_dx_${dx}_mb_${OFFSET}_off"
 
     # Update the .SIF FILE with the model run specifc params
     sed "s#<NT>#"$NT"#g;
         s#<dt>#"$dt"#g;
+        s#<DX>#"$dx"#g;
         s#<RUN>#"$RUN"#g;
         s#<BED_FP>#"$BED_FP"#g;
         s#<OUT_FP>#"$OUT_FP"#g;
@@ -116,4 +112,11 @@ for IC in "observed_IC" "smoothBed_SS_IC"; do
     # Remove the edited SIF to reduce clutter
     # rm ./SRC/SIFs/${RUN}.sif
   done
+
+  echo
+  echo "--------------------------------------------------------------------------"
+  echo "% ${IC} done preprocessing"
+  echo "--------------------------------------------------------------------------"
+  echo
+  
 done
