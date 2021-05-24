@@ -19,8 +19,8 @@ RAT="perturbed_ratio-${R}"                    # directory for current valye of R
 EXP="exp_01_elevation_dependent"              # Experiment name
 SIF="./SRC/SIFs/Hysterisis_restart.sif"       # Template SIF FILE
 
-DOCKER=true
-WESTGRID=false
+DOCKER=false
+WESTGRID=true
 
 
 # Clean the input  file so we can create a new one with commands specifc
@@ -58,7 +58,7 @@ for k in $(seq -w 1 2); do
       docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic; \
                                        bash ./Mesh/makemsh.sh ./Synthetic/${OUT_FP}/mesh_dx${dx}" "${dx}"
     elif [ "$WESTGRID" = true ]; then
-      ./Mesh/makemsh.sh "./Synthetic/${OUT_FP}/mesh_dx${dx} ${dx}"
+      ./Mesh/makemsh.sh "./Synthetic/${OUT_FP}/mesh_dx${dx}" "${dx}"
     else
       echo "Either $DOCKER or $WESTGRID should be decalred as "true" "
     fi
