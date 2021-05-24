@@ -56,7 +56,7 @@ for k in $(seq -w 1 2); do
     # make the mesh for each harmonic
     if [ "$DOCKER" = true ]; then
       docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic; \
-                                       bash ./Mesh/makemsh.sh ./Synthetic/${OUT_FP}/mesh_dx${dx} ${dx}"
+                                       bash ./Mesh/makemsh.sh ./Synthetic/${OUT_FP}/mesh_dx${dx}" "${dx}"
     elif [ "$WESTGRID" = true ]; then
       ./Mesh/makemsh.sh "./Synthetic/${OUT_FP}/mesh_dx${dx} ${dx}"
     else
