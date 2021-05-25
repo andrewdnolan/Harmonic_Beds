@@ -13,6 +13,7 @@
 
 # Ignore the mesh files. Runscripts will write these if need be
 *mesh.*
+*.msh
 
 # Include these since they are needed for all the model runs
 !Data/Topography/REF*
