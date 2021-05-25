@@ -8,6 +8,7 @@
 
 H=100                                         # Characteristic ice-thickness [ m ]
 R=0.01                                        # Amplitude to Wavelength Ratio
+k_max=15                                      # Maximum harmonic
 
 dt=1                                          # size of timestep  [ a ]
 dx=50                                         # grid cell spacing [ m ]
@@ -19,8 +20,8 @@ RAT="perturbed_ratio-${R}"                    # directory for current valye of R
 EXP="exp_01_elevation_dependent"              # Experiment name
 SIF="./SRC/SIFs/Hysterisis_restart.sif"       # Template SIF FILE
 
-DOCKER=false
-WESTGRID=true
+DOCKER=true
+WESTGRID=false
 
 
 # Clean the input  file so we can create a new one with commands specifc
@@ -32,18 +33,20 @@ if [ -f Outputs.txt ]; then
   rm -f Outputs.txt
 fi
 
-# Itterate over the harmonics
-for k in $(seq -w 1 2); do
+# Itterate from k=1 to k_max+1 where the $k_max+1 will be the sum from 1 to k_max
+for k in $(seq -w 1 $((k_max+1))); do
 
-  if [ "$k" = 16 ]; then
-    HARM="harmonics_01-15_H_${H}"
-    BED_FP="./Data/Topography/pert_r_${R}_harmonics_01-15.dat"
+  if [ "$k" = $((k_max+1)) ]; then
+    HARM="harmonics_01-${k_max}_H_${H}"
+    BED_FP="./Data/Topography/pert_r_${R}_harmonics_01-${k_max}.dat"
   else
     HARM="harmonics_${k}_H_${H}"
     BED_FP="./Data/Topography/pert_r_${R}_harmonics_${k}.dat"
   fi
 
-  OUT_FP="${BED}/dx${dx}/${RAT}/${HARM}/${EXP}"
+  # Full path should be: ${BED}/dx${dx}/${RAT}/${HARM}/${EXP} , but I get an
+  # fortran error from the VtuOutputSolver.F90 file when the fp is that long
+  OUT_FP="${RAT}/${HARM}" #${BED}/dx${dx} ... /${EXP}
 
   # Make the results directory for the k-th harmonic if need be
   if [ ! -d "./Synthetic/${OUT_FP}" ];then
@@ -56,7 +59,7 @@ for k in $(seq -w 1 2); do
     # make the mesh for each harmonic
     if [ "$DOCKER" = true ]; then
       docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic; \
-                                       bash ./Mesh/makemsh.sh ./Synthetic/${OUT_FP}/mesh_dx${dx}" "${dx}"
+                                       bash ./Mesh/makemsh.sh ./Synthetic/${OUT_FP}/mesh_dx${dx} ${dx}"
     elif [ "$WESTGRID" = true ]; then
       ./Mesh/makemsh.sh "./Synthetic/${OUT_FP}/mesh_dx${dx}" "${dx}"
     else
@@ -68,7 +71,7 @@ for k in $(seq -w 1 2); do
           "Synthetic/${OUT_FP}/mesh_dx${dx}"
   fi
 
-  if [ "$k" = 16 ]; then
+  if [ "$k" = $((k_max+1)) ]; then
     # perturb the bed with the k-th harmonic of the series
     python3 ./SRC/utils/make_bed.py \
             -B Data/Topography/REF_BedTopo_2.dat \
@@ -90,8 +93,8 @@ for k in $(seq -w 1 2); do
   # now run a spin up for a couple mass-balance offsets using the pertrubed bed
   for OFFSET in $(seq -w 1.90 0.01 2.05); do
 
-    if [ "$k" = 16 ]; then
-      RUN="spinup_k_01-15_${TT}a_dt_${dt}_dx_${dx}_mb_${OFFSET}_off"
+    if [ "$k" = $((k_max+1)) ]; then
+      RUN="spinup_k_01-${k_max}_${TT}a_dt_${dt}_dx_${dx}_mb_${OFFSET}_off"
     else
       RUN="spinup_k_${k}_${TT}a_dt_${dt}_dx_${dx}_mb_${OFFSET}_off"
     fi
