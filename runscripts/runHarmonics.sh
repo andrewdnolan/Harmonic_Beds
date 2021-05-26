@@ -34,7 +34,7 @@ if [ -f Outputs.txt ]; then
 fi
 
 # Itterate from k=1 to k_max+1 where the $k_max+1 will be the sum from 1 to k_max
-for k in $(seq -w 1 $((k_max+1))); do
+for k in $(seq -w 5 $((k_max+1))); do
 
   if [ "$k" = $((k_max+1)) ]; then
     HARM="harmonics_01-${k_max}_H_${H}"
@@ -101,12 +101,12 @@ for k in $(seq -w 1 $((k_max+1))); do
 
     # Update the .SIF FILE with the model run specifc params
     sed "s#<NT>#"$NT"#g;
-        s#<dt>#"$dt"#g;
-        s#<DX>#"$dx"#g;
-        s#<RUN>#"$RUN"#g;
-        s#<BED_FP>#"$BED_FP"#g;
-        s#<OUT_FP>#"$OUT_FP"#g;
-        s#<OFFSET>#"$OFFSET"#g" "${SIF}" > "./SRC/SIFs/${RUN}.sif"
+         s#<dt>#"$dt"#g;
+         s#<DX>#"$dx"#g;
+         s#<RUN>#"$RUN"#g;
+         s#<BED_FP>#"$BED_FP"#g;
+         s#<OUT_FP>#"$OUT_FP"#g;
+         s#<OFFSET>#"$OFFSET"#g" "${SIF}" > "./SRC/SIFs/${RUN}.sif"
 
     echo "./SRC/SIFs/${RUN}.sif" >> Inputs.txt
 
