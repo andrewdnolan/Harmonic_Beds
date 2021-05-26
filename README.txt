@@ -3,6 +3,11 @@
 
 __To Do __:
 
+
+  - [ ] Quick python script to read in *.nc files, calculate volumes and set
+        environmental variable which is the filepath to the .restart file which
+        is closest to $\Delta V = 0$. 
+
   - [ ] Some convergence study of the iterative solver and the best preconditioners
         would be really helpful in speeding up the runs (maybe...)
 
@@ -17,5 +22,5 @@ __To Do __:
 
   - [ ] Set Scripts up to take command line flag, whether running in docker or
         westgrid so don't need to comment things in/out when you want to swtich
-        where you are runnning. 
+        where you are runnning.
         2686024
