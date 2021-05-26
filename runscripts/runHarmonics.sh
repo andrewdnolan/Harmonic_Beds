@@ -20,8 +20,8 @@ RAT="perturbed_ratio-${R}"                    # directory for current valye of R
 EXP="exp_01_elevation_dependent"              # Experiment name
 SIF="./SRC/SIFs/Hysterisis_restart.sif"       # Template SIF FILE
 
-DOCKER=true
-WESTGRID=false
+DOCKER=false
+WESTGRID=true
 
 
 # Clean the input  file so we can create a new one with commands specifc
