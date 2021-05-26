@@ -4,19 +4,14 @@
 #rhoi      = 910.0                                  ![kg m^-3]
 #rhow      = 1000.0                                 ![kg m^-3]
 
-! Variable updated via the bash run file
-
-$RUN    = "pseduo_surge_test_int"
-$offset = 2.40
-
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! BEGIN HEADER
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 Header
   CHECK KEYWORDS Warn
-  Mesh DB           "./Synthetic/perturbed_ratio-0.01/harmonics_1-10" "mesh"   !\"
-  Include Path      "./Synthetic/perturbed_ratio-0.01/harmonics_1-10"         !\"
-  Results Directory "./Synthetic/perturbed_ratio-0.01/harmonics_1-10"         !\"
+  Mesh DB           "./Synthetic/<OUT_FP>/" "mesh<DX>"   !\"
+  Include Path      "./Synthetic/<OUT_FP>/"              !\"
+  Results Directory "./Synthetic/<OUT_FP>/"              !\"
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! END HEADER
@@ -53,13 +48,13 @@ Simulation
   ! Timestep Sizes(3)     = 1.0 0.1 1.0      ! 1/10 a a^{-1} timesteps during surges
   ! Output Intervals(3)   = 1 1 1            ! wrtie output every year
   !TimeStep intervals    = 100               ! 100 total timesteps
-  TimeStep intervals    = 101               ! 100 total timesteps
-  Timestep Sizes        = 0.1               ! 1/10 a a^{-1} timesteps during surges
+  TimeStep intervals    = <NT>              ! 100 total timesteps
+  Timestep Sizes        = <dt>              ! 1/10 a a^{-1} timesteps during surges
   Output Intervals      = 1                 ! wrtie output every 1/10 year
 !  Output File                 = "$RUN".result"
-  Post File                   = "/Exp_02_Sliding/$RUN".vtu"              !\"
+  Post File                   = "VTU/<RUN>.vtu"                            !\"
   Max Output Level            = 3
-  Restart File                = "LK_PRE_1002a_MB_2.4_OFF.result"
+  Restart File                = "<RESTART>"
   Restart Position            = 0
   Restart Time                = Real 0.0
   Restart Before Initial Conditions = Logical False
@@ -228,7 +223,7 @@ Solver 5
 
    Steady State Convergence Tolerance      = 1.0e-4
 
-   Stabilization Method                    = Stabilized
+   Stabilization Method                    = String "Bubbles"
 
    ! Needed to update the Accumulation b/w itterations
    Nonlinear Update Exported Variables     = Logical True
@@ -284,9 +279,9 @@ Solver 8
   Procedure     = "SaveData" "SaveLine"
   Exec Solver   = Before TimeStep
   Exec Interval = 1
-  Filename         = "SaveData/"$RUN".dat"
-  Output Directory = "./Synthetic/perturbed_ratio-0.01/harmonics_1-10/Exp_02_Sliding"
-
+  Filename         = "SaveData/<RUN>.dat"
+  Output Directory = "./Synthetic/<OUT_FP>"
+  !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   Variable 1 = String "zs"
   Variable 2 = String "zbed"
   Variable 3 = String "Velocity 1"
@@ -325,7 +320,7 @@ End
 
 Material 2
   Min Zs                     = Variable Zbed
-                               Real lua "tx[0] + 1.0"
+                               Real lua "tx[0] + 10.0"
   Max Zs                     = Variable Zbed
                                Real lua "tx[0] + 10000.0"
 End
@@ -342,10 +337,6 @@ Body Force 1
   Flow BodyForce 2           = Real -9.7696e15  !gravity in MPa - a - m
   Flow Solution Passive      = Variable depth, height
                                Real lua "((tx[0] + tx[1]) < 10.0)"
-  ! Mean Velocity 1            = Variable int Velocity 1, height
-  !                              Real LUA "tx[1]-tx[0]"
-  ! Mean Velocity 2            = Variable int Velocity 2, height
-  !                              Real LUA "tx[1]-tx[0]"
 End
 
 Body Force 2
@@ -377,33 +368,38 @@ Boundary Condition 1
 
   Zbed                       = Variable Coordinate 1
                                Real
+                                include "<BED_FP>"
                                 !include  "./Data/BedTopo.dat"
-                                include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
+                                !include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
                                End
 
   Bottom Surface             = Variable Coordinate 1
                                Real
+                                include "<BED_FP>"
                                 !include  "./Data/BedTopo.dat"
-                                include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
+                                !include "./Data/Topography/perturbed_10-harmonics_ratio-0.01.dat"
                                End
   Save Line                  = Logical True
 End
 
 Boundary Condition 2
-  Name                       = "sides"
-  Target Boundaries(2)       = 3 4
-  Velocity 1                 = Real 0.0e0
-  !depth                      = Real 0.0
-End
-
-Boundary Condition 3
   Name                       = "surface"
   Depth                      = real 0.0
   Top Surface                = Equals "Zs"
   Target Boundaries          = 2
   Body ID                    = 2 !!! THIS IS ESSENTIAL
-
   Save Line                  = Logical True
+End
+
+Boundary Condition 3
+  Name                       = "Head Wall"
+  Target Boundaries          = 3
+  Zs                         = Equals "Zbed"
+End
+
+Boundary Condition 4
+  Name                       = "Front"
+  Target Boundaries          = 4
 End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! END BOUNDARY CONDITIONs

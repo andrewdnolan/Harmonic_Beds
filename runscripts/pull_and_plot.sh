@@ -24,14 +24,14 @@ for k in $(seq -w 1 $((k_max+1))); do
              ./Synthetic/${RAT}/${HARM}/hdf5/
 
   python3 SRC/utils/plot_convergence.py \
-          -fp "./Synthetic/${RAT}/${HARM}/hdf5/*.nc" \
+          -fp "./Synthetic/${RAT}/${HARM}/hdf5/spinup_*.nc" \
           -mb 1.90 0.01 2.05 \
           --plot_volume      \
           --title "$ k=${k} $" \
           -out_fn "${OUT_FP}/Vol_1.9--2.5_dx_50m_k_${k}.png"
 
   python3 SRC/utils/plot_convergence.py \
-          -fp "./Synthetic/${RAT}/${HARM}/hdf5/*.nc" \
+          -fp "./Synthetic/${RAT}/${HARM}/hdf5/spinup_*.nc" \
           -mb 1.90 0.01 2.05 \
           --plot_Z_s         \
           --title "$ k=${k} $" \
