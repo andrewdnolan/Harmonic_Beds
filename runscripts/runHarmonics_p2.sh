@@ -100,7 +100,7 @@ for k in $(seq -w 1 $((k_max+1))); do
   OFFSET=`cat temp` && rm temp
 
   # Define run specific variables
-  RUN="psuedo_k_${k}_${TT}a_dt_${dt}_dx_${dx}_mb_${OFFSET}_off"
+  RUN="pseudo_k_${k}_${TT}a_dt_${dt}_dx_${dx}_mb_${OFFSET}_off"
   RESTART="spinup_k_${k}_1000a_dt_1_dx_50_mb_${OFFSET}_off.result"
 
   # Update the .SIF FILE with the model run specifc params
