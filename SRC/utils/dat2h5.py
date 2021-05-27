@@ -148,7 +148,7 @@ def main():
 
         #z_s   = np.where(mask[:, ::-1], dat[0::2,:,7], dat[1::2,:,8]).T
         z_s   = xr.DataArray(
-                data = np.where(mask[:, ::-1], dat[0::2,:,7], dat[0::2,:,8]).T,
+                data = np.where(dat[0::2,:,7] - dat[0::2,:,8] <= 10, dat[0::2,:,8], dat[0::2,:,7]).T,
                 dims = ["x", "t"],
                 coords=dict( x = x, t = t),
                 attrs=dict( description="Surface Elevation", units="m a.s.l.") )
@@ -206,7 +206,7 @@ def main():
         x     = dat[0,:,4].T
         t     = dt * dat[:,0,0].T - dt
         z_s   = xr.DataArray(
-                data = np.where(mask[:, ::-1], dat[:,:,7], dat[:,:,8]).T,
+                data = np.where(dat[:,:,7] - dat[:,:,8] <= 10, dat[:,:,8], dat[:,:,7]).T,
                 dims = ["x", "t"],
                 coords=dict( x = x, t = t),
                 attrs=dict( description="Surface Elevation", units="m a.s.l.") )

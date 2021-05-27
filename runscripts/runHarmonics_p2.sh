@@ -5,7 +5,7 @@
 #   - part-two run the pseudo suges for each spun-up harmonic
 #  You need to define a variable RESTART which is the name of the restart file
 # to use for each harmonic. Could hard code this or write a quick python script to
-# set this variable 
+# set this variable
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 H=100                                         # Characteristic ice-thickness [ m ]
@@ -15,7 +15,7 @@ k_max=15                                      # Maximum harmonic
 dx=50                                         # grid cell spacing [ m ]
 dt=0.1                                        # size of timestep  [ a ]
 NT=101                                        # Number of time step
-TT=$((NT*dt-dt))                              # total time of simulation
+TT=$(awk -v NT=$NT -v dt=$dt "BEGIN { print NT*dt - dt }" )
 
 BED="farinotti_corrected"                     # Mesh DB for the given bed config
 RAT="perturbed_ratio-${R}"                    # directory for current value of R
@@ -35,15 +35,14 @@ if [ -f Outputs.txt ]; then
 fi
 
 # Itterate from k=1 to k_max+1 where the $k_max+1 will be the sum from 1 to k_max
-for k in $(seq -w 5 $((k_max+1))); do
+for k in $(seq -w 1 $((k_max+1))); do
 
   if [ "$k" = $((k_max+1)) ]; then
-    HARM="harmonics_01-${k_max}_H_${H}"
-    BED_FP="./Data/Topography/pert_r_${R}_harmonics_01-${k_max}.dat"
-  else
-    HARM="harmonics_${k}_H_${H}"
-    BED_FP="./Data/Topography/pert_r_${R}_harmonics_${k}.dat"
+    k="01-${k_max}"
   fi
+
+  HARM="harmonics_${k}_H_${H}"
+  BED_FP="./Data/Topography/pert_r_${R}_harmonics_${k}.dat"
 
   # Full path should be: ${BED}/dx${dx}/${RAT}/${HARM}/${EXP} , but I get an
   # fortran error from the VtuOutputSolver.F90 file when the fp is that long
@@ -72,13 +71,13 @@ for k in $(seq -w 5 $((k_max+1))); do
           "Synthetic/${OUT_FP}/mesh_dx${dx}"
   fi
 
-  if [ "$k" = $((k_max+1)) ]; then
+  if [ "$k" = "01-${k_max}" ]; then
     # perturb the bed with the k-th harmonic of the series
     python3 ./SRC/utils/make_bed.py \
             -B Data/Topography/REF_BedTopo_2.dat \
             -O $BED_FP \
             -H $H      \
-            -N $k      \
+            -N $k_max  \
             -R $R      \
             --sum
   else
@@ -91,11 +90,20 @@ for k in $(seq -w 5 $((k_max+1))); do
             -R $R
   fi
 
-  if [ "$k" = $((k_max+1)) ]; then
-    RUN="psuedo_k_01-${k}_${TT}a_dt_${dt}_dx_${dx}_mb_${OFFSET}_off"
-  else
-    RUN="psuedo_k_01-${k}_${TT}a_dt_${dt}_dx_${dx}_mb_${OFFSET}_off"
-  fi
+  ####
+  # find RESTART file and print it to a temp file
+  ####
+  python3 SRC/utils/find_restart.py \
+          -fp "./Synthetic/${RAT}/${HARM}/hdf5/spinup_*.nc" \
+          -mb 1.90 0.01 2.05 \
+          --result_filename "spinup_k_${k}_1000a_dt_1_dx_50_mb_{}_off.result" > temp
+
+  #
+  OFFSET=`cat temp` && rm temp
+  RESTART="spinup_k_${k}_1000a_dt_1_dx_50_mb_${OFFSET}_off.result"
+
+
+  RUN="psuedo_k_${k}_${TT}a_dt_${dt}_dx_${dx}_mb_${OFFSET}_off"
 
   # Update the .SIF FILE with the model run specifc params
   sed "s#<NT>#"$NT"#g;
@@ -107,6 +115,7 @@ for k in $(seq -w 5 $((k_max+1))); do
        s#<OFFSET>#"$OFFSET"#g;
        s#<RESTART>#"$RESTART"#g;" "${SIF}" > "./SRC/SIFs/${RUN}.sif"
 
+
   echo "./SRC/SIFs/${RUN}.sif" >> Inputs.txt
 
   echo python3 ./SRC/utils/dat2h5.py \
@@ -115,7 +124,7 @@ for k in $(seq -w 5 $((k_max+1))); do
           -Nx 555         \
           -dt $dt         \
           -offset $OFFSET \
-          -SpinUp  >> Outputs.txt
+          -PseudoSurge  >> Outputs.txt
 
   # # Remove the .SIF file to reduce clutter
   # rm ./SRC/SIFs/${RUN}.sif

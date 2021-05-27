@@ -9,7 +9,7 @@
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 Header
   CHECK KEYWORDS Warn
-  Mesh DB           "./Synthetic/<OUT_FP>/" "mesh<DX>"   !\"
+  Mesh DB           "./Synthetic/<OUT_FP>/" "mesh_dx<DX>"   !\"
   Include Path      "./Synthetic/<OUT_FP>/"              !\"
   Results Directory "./Synthetic/<OUT_FP>/"              !\"
 End
@@ -22,7 +22,7 @@ End
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 Constants
   Stefan Boltzmann    = 5.67e-08                    ![W m^−2 K^−4]
-  Mass Balance Offset = real $offset                ![m a^-1]
+  Mass Balance Offset = real <OFFSET>               ![m a^-1]
   gamma               = real -1.0e-05               ![ ] sklearn SVR hyperparameter
   intercept           = real -1.2393076753413321    ![m a^-1] MB SVR intercept
 End
@@ -40,7 +40,7 @@ Simulation
   BDF Order                   = 2
 
   Steady State Min Iterations = 1
-  Steady State Max Iterations = 1 !2
+  Steady State Max Iterations = 1
 
   ! Lets set variable timesteps to avoid numerical instabilites during
   ! the pseduo surge period
@@ -48,6 +48,7 @@ Simulation
   ! Timestep Sizes(3)     = 1.0 0.1 1.0      ! 1/10 a a^{-1} timesteps during surges
   ! Output Intervals(3)   = 1 1 1            ! wrtie output every year
   !TimeStep intervals    = 100               ! 100 total timesteps
+
   TimeStep intervals    = <NT>              ! 100 total timesteps
   Timestep Sizes        = <dt>              ! 1/10 a a^{-1} timesteps during surges
   Output Intervals      = 1                 ! wrtie output every 1/10 year
@@ -244,35 +245,35 @@ Solver 6
   Parameter 1   =  String "Slip Coefficient 2"
 End
 
-! Solver 7
-!   ! Get the depth averaged velocity
-!   Equation              = "StructuredProjectToPlane"
-!   Exec Solver           = Before TimeStep
-!   Procedure             = File "StructuredProjectToPlane" "StructuredProjectToPlane"
-!   Active Coordinate     = Integer 2
-!   Project to Everewhere = Logical True
-!   Variable 1            = String "Velocity 1"
-!   Operator 1            = String "sum"
-!   Variable 2            = String "Velocity 2"
-!   Operator 2            = String "sum"
-! End
-
 Solver 7
-  Equation                           = "Integrated Velocity"
-  Procedure                          = File "ElmerIceSolvers" "IntegratedVelocity"
-  ! Velocity variables will be automatically found from the the flow solver
-  Variable                           = -nooutput -dofs 1 "PlaceHolder"
-  Exported Variable 1                = -dofs 1  "Integrated Velocity"
-
-  !Flow Solver Name = String "Flow Solution"
-  On Surface                         = Logical True
-  Compute Flux                       = Logical False
-
-  Linear System Solver               = Direct
-  Linear System Direct Method        = umfpack
-
-  Steady State Convergence Tolerance = Real 1.0e-3
+  ! Get the depth averaged velocity
+  Equation              = "StructuredProjectToPlane"
+  Exec Solver           = Before TimeStep
+  Procedure             = File "StructuredProjectToPlane" "StructuredProjectToPlane"
+  Active Coordinate     = Integer 2
+  Project to Everewhere = Logical True
+  Variable 1            = String "Velocity 1"
+  Operator 1            = String "sum"
+  Variable 2            = String "Velocity 2"
+  Operator 2            = String "sum"
 End
+
+! Solver 7
+!   Equation                           = "Integrated Velocity"
+!   Procedure                          = File "ElmerIceSolvers" "IntegratedVelocity"
+!   ! Velocity variables will be automatically found from the the flow solver
+!   Variable                           = -nooutput -dofs 1 "PlaceHolder"
+!   Exported Variable 1                = -dofs 1  "Integrated Velocity"
+!
+!   Flow Solver Name                   = String "Flow Solution"
+!   On Surface                         = Logical True
+!   Compute Flux                       = Logical False
+!
+!   Linear System Solver               = Direct
+!   Linear System Direct Method        = umfpack
+!
+!   Steady State Convergence Tolerance = Real 1.0e-3
+! End
 
 Solver 8
   Equation      = "SaveLine"
@@ -288,6 +289,7 @@ Solver 8
   Variable 4 = String "Velocity 2"
   Variable 5 = String "Zs Accumulation Flux 2"
   Variable 6 = String "Slip Coefficient 2"
+  ! Variable 7 = String "Integrated Velocity"
   Variable 7 = String "sum Velocity 1"
   Variable 8 = String "sum Velocity 2"
 End
