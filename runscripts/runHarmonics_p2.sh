@@ -3,9 +3,7 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # runHarmonics_p2.sh:
 #   - part-two run the pseudo suges for each spun-up harmonic
-#  You need to define a variable RESTART which is the name of the restart file
-# to use for each harmonic. Could hard code this or write a quick python script to
-# set this variable
+#
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 H=100                                         # Characteristic ice-thickness [ m ]
@@ -90,20 +88,20 @@ for k in $(seq -w 1 $((k_max+1))); do
             -R $R
   fi
 
-  ####
+  #-----------------------------------------------------------------------------
   # find RESTART file and print it to a temp file
-  ####
+  #-----------------------------------------------------------------------------
   python3 SRC/utils/find_restart.py \
           -fp "./Synthetic/${RAT}/${HARM}/hdf5/spinup_*.nc" \
           -mb 1.90 0.01 2.05 \
           --result_filename "spinup_k_${k}_1000a_dt_1_dx_50_mb_{}_off.result" > temp
 
-  #
+  # get value of temp file and assign to variable, delete temp file
   OFFSET=`cat temp` && rm temp
-  RESTART="spinup_k_${k}_1000a_dt_1_dx_50_mb_${OFFSET}_off.result"
 
-
+  # Define run specific variables
   RUN="psuedo_k_${k}_${TT}a_dt_${dt}_dx_${dx}_mb_${OFFSET}_off"
+  RESTART="spinup_k_${k}_1000a_dt_1_dx_50_mb_${OFFSET}_off.result"
 
   # Update the .SIF FILE with the model run specifc params
   sed "s#<NT>#"$NT"#g;
