@@ -3,11 +3,6 @@
 
 __To Do __:
 
-
-  - [ ] Quick python script to read in *.nc files, calculate volumes and set
-        environmental variable which is the filepath to the .restart file which
-        is closest to $\Delta V = 0$. 
-
   - [ ] Some convergence study of the iterative solver and the best preconditioners
         would be really helpful in speeding up the runs (maybe...)
 
@@ -19,6 +14,9 @@ __To Do __:
   - [ ] For some reason the spin-up runs no longer write the initial condition
         for t=0. Why is this? I know they were before, I don't think anythings
         changed which would have affected this??
+        - [ ] I think for some reason this has to do with specifying the bed file
+              as an init instead of JUST in the BC section. Compare to the Pseudo surge .SIF
+              for a point a comparison where writing the IC works. 
 
   - [ ] Set Scripts up to take command line flag, whether running in docker or
         westgrid so don't need to comment things in/out when you want to swtich
