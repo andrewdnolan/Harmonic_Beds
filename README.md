@@ -19,6 +19,17 @@ __To Do__:
       for a point a comparison where writing the IC works.
 
   - [ ] Set Scripts up to take command line flag, whether running in docker or
-        westgrid so don't need to comment things in/out when you want to swtich
-        where you are runnning.
+        westgrid so don't need to comment things in/out when you want to switch
+        where you are running.
         2686024
+
+Sensitivity Test:
+
+  - Amplitude to Wavelength ratio 
+  - hyperparameters:
+    - gaussian covariance function (for every variable)
+      - length scale
+      - amplitude
+  - Priors:
+    - Bed
+    -
