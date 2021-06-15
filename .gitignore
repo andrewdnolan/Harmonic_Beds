@@ -16,9 +16,9 @@
 *.msh
 
 # Include these since they are needed for all the model runs
-!Data/Topography/REF*
-!Data/SMB/SVR/dual_coef.dat
-!Data/SMB/SVR/support_vectors.dat
+!elmer/Data/Topography/REF*
+!elmer/Data/SMB/SVR/dual_coef.dat
+!elmer/Data/SMB/SVR/support_vectors.dat
 
 # Ignore all the compiled code
 bin/*
