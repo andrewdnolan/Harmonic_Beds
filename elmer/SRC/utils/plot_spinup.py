@@ -189,8 +189,6 @@ def main(argv):
     mf_dataset["H"]   = mf_dataset.z_s - mf_dataset.z_b
     #---------------------------------------------------------------------------
 
-    out_fn = args.output_filename
-
     if volume_plot:
         fig, _  = plot_volume( mf_dataset,
                            precision=len(args.mb_range[1])-2,

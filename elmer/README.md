@@ -25,7 +25,7 @@ __To Do__:
 
 Sensitivity Test:
 
-  - Amplitude to Wavelength ratio 
+  - Amplitude to Wavelength ratio
   - hyperparameters:
     - gaussian covariance function (for every variable)
       - length scale

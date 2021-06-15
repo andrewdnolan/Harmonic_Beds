@@ -336,7 +336,7 @@ End
 Body Force 1
   Name                       = "BodyForce"
   Flow BodyForce 1           = Real 0.0
-  Flow BodyForce 2           = Real -9.7696e15  !gravity in MPa - a - m
+  Flow BodyForce 2           = Real -9.7696e15  ! [m a^-1] gravity
   Flow Solution Passive      = Variable depth, height
                                Real lua "((tx[0] + tx[1]) < 10.0)"
 End
@@ -369,7 +369,7 @@ Boundary Condition 1
                                Real Procedure "ElmerIceUSF" "Sliding_Weertman"
   ! Slip Coefficient 2 = Variable Coordinate 1
   !       Real MATC "if (tx(0) < 27000) (0.00035); else (1.0)"  ! reference good value is 0.001
-  Weertman Friction Coefficient = Real 2.412579e-2
+  Weertman Friction Coefficient = Real 0.00035
   Weertman Exponent             = Real $1.0/3.0
   Weertman Linear Velocity      = Real 0.00001
 
