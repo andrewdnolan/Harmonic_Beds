@@ -10,6 +10,7 @@
 *.npy
 *.pkl
 *.zip
+*.tar.gz
 
 # Ignore the mesh files. Runscripts will write these if need be
 *mesh.*
