@@ -79,7 +79,7 @@ def plot_volume(mf_dataset, precision=3, title=''):
 
     fig.tight_layout()
 
-    return fig
+    return fig, ax
 
 def plot_final_z_s(mf_dataset, precision=3, title=''):
     # Make a colormap and all the associated var names
@@ -119,7 +119,7 @@ def plot_final_z_s(mf_dataset, precision=3, title=''):
 
     fig.tight_layout()
 
-    return fig
+    return fig, ax
 
 def main(argv):
 
@@ -189,14 +189,12 @@ def main(argv):
     mf_dataset["H"]   = mf_dataset.z_s - mf_dataset.z_b
     #---------------------------------------------------------------------------
 
-    out_fn = args.output_filename
-
     if volume_plot:
-        fig = plot_volume( mf_dataset,
+        fig, _  = plot_volume( mf_dataset,
                            precision=len(args.mb_range[1])-2,
                            title=title)
     if z_s_plot:
-        fig = plot_final_z_s( mf_dataset,
+        fig, _  = plot_final_z_s( mf_dataset,
                               precision=len(args.mb_range[1])-2,
                               title=title)
 
