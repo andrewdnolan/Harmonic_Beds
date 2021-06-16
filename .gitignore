@@ -21,7 +21,7 @@
 !elmer/Data/SMB/SVR/support_vectors.dat
 
 # Ignore all the compiled code
-bin/*
+elmer/bin/*
 # Ignore the log files
 logs/
 # Ignore the plots
