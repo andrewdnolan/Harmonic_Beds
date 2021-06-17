@@ -11,7 +11,7 @@
 
 
 grdfile="./Mesh/Synthetic.grd"
-bedfile="./Data/Topography/REF_BedTopo_2_dx50.dat"
+bedfile="./Data/Topography/REF_BedTopo.dat"
 
 
 start=$(awk 'NR==1 {print $1}' $bedfile)

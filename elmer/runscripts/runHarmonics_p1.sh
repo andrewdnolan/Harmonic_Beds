@@ -74,7 +74,7 @@ for k in 00 $(seq -w 1 $((k_max+1))); do
   if [ "$k" = $((k_max+1)) ]; then
     # perturb the bed with the k-th harmonic of the series
     python3 ./SRC/utils/make_bed.py \
-            -B Data/Topography/REF_BedTopo_2.dat \
+            -B Data/Topography/REF_BedTopo.dat \
             -O $BED_FP \
             -H $H      \
             -N $k      \
@@ -83,7 +83,7 @@ for k in 00 $(seq -w 1 $((k_max+1))); do
   else
     # perturb the bed with the k-th harmonic of the series
     python3 ./SRC/utils/make_bed.py \
-            -B Data/Topography/REF_BedTopo_2.dat \
+            -B Data/Topography/REF_BedTopo.dat \
             -O $BED_FP \
             -H $H      \
             -N $k      \

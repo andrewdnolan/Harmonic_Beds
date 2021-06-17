@@ -38,7 +38,7 @@ fi
 # perturb the bed with first 10 harmonics of the series
 # (i.e. evaluate the series from 1 to 10)
 python3 ./SRC/utils/make_bed.py \
-        -B Data/Topography/REF_BedTopo_2_dx50.dat \
+        -B Data/Topography/REF_BedTopo.dat \
         -O $BED_FP \
         -H 100.0   \
         -N 15      \
@@ -118,5 +118,5 @@ for IC in "observed_IC" "smoothBed_SS_IC"; do
   echo "% ${IC} done preprocessing"
   echo "--------------------------------------------------------------------------"
   echo
-  
+
 done
