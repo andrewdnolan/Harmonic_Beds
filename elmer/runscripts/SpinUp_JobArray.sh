@@ -24,16 +24,6 @@ module load python/3.6
 # Lazy way
 module load scipy-stack
 source $HOME/py4elmer/bin/activate
-
-#////////////////////
-## Fancy way
-#////////////////////
-# Creating virtual environments inside of your jobs
-# virtualenv --no-download $SLURM_TMPDIR/env
-# source $SLURM_TMPDIR/env/bin/activate
-
-# pip install --no-index --upgrade pip
-# pip install --no-index -r $HOME/requirements.txt
 ###############################################################################
 
 # Get the fp to a .sif file

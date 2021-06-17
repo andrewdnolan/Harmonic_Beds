@@ -34,7 +34,7 @@ if [ -f Outputs.txt ]; then
 fi
 
 # Itterate from k=1 to k_max+1 where the $k_max+1 will be the sum from 1 to k_max
-for k in $(seq -w 5 $((k_max+1))); do
+for k in 00 $(seq -w 1 $((k_max+1))); do
 
   if [ "$k" = $((k_max+1)) ]; then
     HARM="harmonics_01-${k_max}_H_${H}"
@@ -58,7 +58,7 @@ for k in $(seq -w 5 $((k_max+1))); do
 
     # make the mesh for each harmonic
     if [ "$DOCKER" = true ]; then
-      docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic; \
+      docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic/elmer; \
                                        bash ./Mesh/makemsh.sh ./Synthetic/${OUT_FP}/mesh_dx${dx} ${dx}"
     elif [ "$WESTGRID" = true ]; then
       ./Mesh/makemsh.sh "./Synthetic/${OUT_FP}/mesh_dx${dx}" "${dx}"
@@ -67,7 +67,7 @@ for k in $(seq -w 5 $((k_max+1))); do
     fi
 
     # Copy the .result file needed for restart into each mesh directory
-    cp -v Synthetic/farinotti_corrected/dx50/exp_01_elevation_dependent/mesh_dx50/LK_PRE_2000a_dt_1_dx_50_MB_2.01_OFF.result \
+    cp -v Synthetic/exp_01_elevation_dependent/mesh_dx50/LK_PRE_2000a_dt_1_dx_50_MB_2.01_OFF.result \
           "Synthetic/${OUT_FP}/mesh_dx${dx}"
   fi
 

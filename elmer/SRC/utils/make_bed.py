@@ -67,8 +67,11 @@ def compute_harmonics(x, N=10, ratio=10e-3, H_bar=200.0, sum=False):
         λ = N*H_bar                        # [m] Wavelength
         A = ratio * λ                      # [m] Amplitude of k-th harmonic
 
-        # Compute the k-th harmonic
-        synth = A*np.sin(((2*np.pi)/λ)*x)
+        if N == 0:
+            synth = np.zeros(x.shape)
+        else:
+            # Compute the k-th harmonic
+            synth = A*np.sin(((2*np.pi)/λ)*x)
 
         return synth
 

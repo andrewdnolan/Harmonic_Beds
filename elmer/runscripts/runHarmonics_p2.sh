@@ -32,8 +32,9 @@ if [ -f Outputs.txt ]; then
   rm -f Outputs.txt
 fi
 
-# Itterate from k=1 to k_max+1 where the $k_max+1 will be the sum from 1 to k_max
-for k in $(seq -w 1 $((k_max+1))); do
+# Itterate from k=0 to k_max+1 where the $k_max+1 will be the sum from 1 to k_max
+#for k in 00 $(seq -w 1 $((k_max+1))); do
+for k in 00;do
 
   if [ "$k" = $((k_max+1)) ]; then
     k="01-${k_max}"
@@ -56,7 +57,7 @@ for k in $(seq -w 1 $((k_max+1))); do
 
     # make the mesh for each harmonic
     if [ "$DOCKER" = true ]; then
-      docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic; \
+      docker exec elmerenv /bin/sh -c "cd /home/glacier/shared_directory/Synthetic/elmer; \
                                        bash ./Mesh/makemsh.sh ./Synthetic/${OUT_FP}/mesh_dx${dx} ${dx}"
     elif [ "$WESTGRID" = true ]; then
       ./Mesh/makemsh.sh "./Synthetic/${OUT_FP}/mesh_dx${dx}" "${dx}"
@@ -64,9 +65,6 @@ for k in $(seq -w 1 $((k_max+1))); do
       echo "Either $DOCKER or $WESTGRID should be decalred as "true" "
     fi
 
-    # Copy the .result file needed for restart into each mesh directory
-    cp -v Synthetic/farinotti_corrected/dx50/exp_01_elevation_dependent/mesh_dx50/LK_PRE_2000a_dt_1_dx_50_MB_2.01_OFF.result \
-          "Synthetic/${OUT_FP}/mesh_dx${dx}"
   fi
 
   if [ "$k" = "01-${k_max}" ]; then
@@ -91,17 +89,23 @@ for k in $(seq -w 1 $((k_max+1))); do
   #-----------------------------------------------------------------------------
   # find RESTART file and print it to a temp file
   #-----------------------------------------------------------------------------
-  python3 SRC/utils/find_restart.py \
-          -fp "./Synthetic/${RAT}/${HARM}/hdf5/spinup_*.nc" \
-          -mb 1.90 0.01 2.05 \
-          --result_filename "spinup_k_${k}_1000a_dt_1_dx_50_mb_{}_off.result" > temp
+  if [ "$k" = "00" ]; then
+    OFFSET=2.01
+    RUN="pseudo_k_${k}_${TT}a_dt_${dt}_dx_${dx}_mb_${OFFSET}_off"
+    RESTART="LK_PRE_2000a_dt_1_dx_50_MB_2.01_OFF.result"
+  else
+    python3 SRC/utils/find_restart.py \
+            -fp "./Synthetic/${RAT}/${HARM}/hdf5/spinup_*.nc" \
+            -mb 1.90 0.01 2.05 \
+            --result_filename "spinup_k_${k}_1000a_dt_1_dx_50_mb_{}_off.result" > temp
 
-  # get value of temp file and assign to variable, delete temp file
-  OFFSET=`cat temp` && rm temp
+    # get value of temp file and assign to variable, delete temp file
+    OFFSET=`cat temp` && rm temp
+    # Define run specific variables
+    RUN="pseudo_k_${k}_${TT}a_dt_${dt}_dx_${dx}_mb_${OFFSET}_off"
+    RESTART="spinup_k_${k}_1000a_dt_1_dx_50_mb_${OFFSET}_off.result"
+  fi
 
-  # Define run specific variables
-  RUN="pseudo_k_${k}_${TT}a_dt_${dt}_dx_${dx}_mb_${OFFSET}_off"
-  RESTART="spinup_k_${k}_1000a_dt_1_dx_50_mb_${OFFSET}_off.result"
 
   # Update the .SIF FILE with the model run specifc params
   sed "s#<NT>#"$NT"#g;

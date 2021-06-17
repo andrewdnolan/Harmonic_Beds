@@ -1,16 +1,1 @@
-./SRC/SIFs/psuedo_k_01_10a_dt_0.1_dx_50_mb_2.01_off.sif
-./SRC/SIFs/psuedo_k_02_10a_dt_0.1_dx_50_mb_2.02_off.sif
-./SRC/SIFs/psuedo_k_03_10a_dt_0.1_dx_50_mb_2.01_off.sif
-./SRC/SIFs/psuedo_k_04_10a_dt_0.1_dx_50_mb_2.01_off.sif
-./SRC/SIFs/psuedo_k_05_10a_dt_0.1_dx_50_mb_2.01_off.sif
-./SRC/SIFs/psuedo_k_06_10a_dt_0.1_dx_50_mb_2.01_off.sif
-./SRC/SIFs/psuedo_k_07_10a_dt_0.1_dx_50_mb_2.01_off.sif
-./SRC/SIFs/psuedo_k_08_10a_dt_0.1_dx_50_mb_2.01_off.sif
-./SRC/SIFs/psuedo_k_09_10a_dt_0.1_dx_50_mb_2.01_off.sif
-./SRC/SIFs/psuedo_k_10_10a_dt_0.1_dx_50_mb_2.02_off.sif
-./SRC/SIFs/psuedo_k_11_10a_dt_0.1_dx_50_mb_2.01_off.sif
-./SRC/SIFs/psuedo_k_12_10a_dt_0.1_dx_50_mb_2.02_off.sif
-./SRC/SIFs/psuedo_k_13_10a_dt_0.1_dx_50_mb_2.01_off.sif
-./SRC/SIFs/psuedo_k_14_10a_dt_0.1_dx_50_mb_2.01_off.sif
-./SRC/SIFs/psuedo_k_15_10a_dt_0.1_dx_50_mb_2.02_off.sif
-./SRC/SIFs/psuedo_k_01-15_10a_dt_0.1_dx_50_mb_1.96_off.sif
+./SRC/SIFs/pseudo_k_00_10a_dt_0.1_dx_50_mb_2.01_off.sif

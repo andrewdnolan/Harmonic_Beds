@@ -42,22 +42,21 @@ python3 SRC/utils/find_restart.py \
 OFFSET=`cat temp` && rm temp
 
 # Define run specific variables
-RUN="pseudo_k_${k}_${TT}a_dt_${dt}_dx_${dx}_mb_${OFFSET}_off_nonlin"
-RESTART="spinup_k_${k}_1000a_dt_1_dx_50_mb_${OFFSET}_off.result"
-
+RUN="pseudo_k_${k}_${TT}a_dt_${dt}_dx_${dx}_mb_${OFFSET}_off"
+RESTART="spinup_k_${k}_1000a_dt_1_dx_50_mb_${OFFSET}_off_nonlin.result"
 echo
 echo "RUN:     ${RUN}"
 echo "RESTART: ${RESTART}"
 
-# Update the .SIF FILE with the model run specifc params
-sed "s#<NT>#"$NT"#g;
-     s#<dt>#"$dt"#g;
-     s#<DX>#"$dx"#g;
-     s#<RUN>#"$RUN"#g;
-     s#<BED_FP>#"$BED_FP"#g;
-     s#<OUT_FP>#"$OUT_FP"#g;
-     s#<OFFSET>#"$OFFSET"#g;
-     s#<RESTART>#"$RESTART"#g;" "${SIF}" > "./SRC/SIFs/${RUN}.sif"
+# # Update the .SIF FILE with the model run specifc params
+# sed "s#<NT>#"$NT"#g;
+#      s#<dt>#"$dt"#g;
+#      s#<DX>#"$dx"#g;
+#      s#<RUN>#"$RUN"#g;
+#      s#<BED_FP>#"$BED_FP"#g;
+#      s#<OUT_FP>#"$OUT_FP"#g;
+#      s#<OFFSET>#"$OFFSET"#g;
+#      s#<RESTART>#"$RESTART"#g;" "${SIF}" > "./SRC/SIFs/${RUN}.sif"
 
 
 
