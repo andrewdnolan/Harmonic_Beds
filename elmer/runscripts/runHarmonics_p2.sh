@@ -20,8 +20,8 @@ RAT="perturbed_ratio-${R}"                    # directory for current value of R
 EXP="exp_02_sliding"                          # Experiment name
 SIF="./SRC/SIFs/Pseudo_Surge.sif"             # Template SIF FILE
 
-DOCKER=true
-WESTGRID=false
+DOCKER=flase
+WESTGRID=true
 
 # Clean the input  file so we can create a new one with commands specifc
 if [ -f Inputs.txt ]; then
