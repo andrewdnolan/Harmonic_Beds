@@ -15,10 +15,10 @@ TT=$((NT*dt-dt))                        # total time of simulation
 SIF='./SRC/SIFs/Prognostic_SpinUp.sif'  # Template SIF FILE
 BED='farinotti_corrected'               # Mesh DB for the given bed config
 EXP="exp_01_elevation_dependent"        # Experiment (folder) name
-OUT_FP="${BED}/dx${dx}/${EXP}"          # Output File Path
+OUT_FP="${EXP}"                         # Output File Path
 
 
-for OFFSET in $(seq -w 2.01 0.01 2.05);do
+for OFFSET in $(seq -w 1.90 0.01 2.05);do
 
   # Model RUN identifier
   RUN="LK_PRE_${TT}a_dt_${dt}_dx_${dx}_MB_${OFFSET}_OFF"

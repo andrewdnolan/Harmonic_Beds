@@ -174,11 +174,11 @@ ax  = plt.subplot(111, projection=crs)
 # Plot the base image
 ax.imshow(base_img.transpose([1, 2, 0]), transform=crs, origin="upper", extent=imext)
 # Plot the (glims and flowline) shapefiles
-ax.add_geometries( PreGLIMS.geometry,  facecolor="none", crs=crs, edgecolor="#e7298a", linewidth=0.5)
-ax.add_geometries( PostGLIMS.geometry, facecolor="none", crs=crs, edgecolor="#d95f02", linewidth=0.5)
-ax.add_geometries( flowline.geometry,  facecolor="none", crs=crs, edgecolor="k", linewidth=0.5 )
+ax.add_geometries( PreGLIMS.geometry,  facecolor="none", crs=crs, edgecolor="#e7298a", linewidth=1.0)
+ax.add_geometries( PostGLIMS.geometry, facecolor="none", crs=crs, edgecolor="#d95f02", linewidth=1.0)
+ax.add_geometries( flowline.geometry,  facecolor="none", crs=crs, edgecolor="k",       linewidth=1.0)
 
-ticks.loc[ticks["x"] % 1000 == 0, "geometry"].plot( ax=ax, markersize=2, marker="x", zorder=4, color="k" )
+ticks.loc[ticks["x"] % 1000 == 0, "geometry"].plot( ax=ax, markersize=4, marker="x", zorder=4, color="k" )
 
 ################################################################################
 # Legend

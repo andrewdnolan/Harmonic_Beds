@@ -10,14 +10,12 @@ import scipy.linalg as LA
 import matplotlib.pyplot as plt
 import scipy.interpolate as interpolate
 
-sys.path.append('../')
+sys.path.append('../../elmer/')
 import SRC.utils.plot_spinup as plotting
 
-from matplotlib import animation, rc
 plt.rcParams['text.usetex'] = True
-plt.rcParams['animation.html'] = 'jshtml'
 
-fp      = '../../Synthetic/farinotti_corrected/dx50/exp_01_elevation_dependent/hdf5/LK_*.nc'
+fp      = '../../elmer/Synthetic/exp_01_elevation_dependent/hdf5/LK_*dx_50*.nc'
 files   = sorted(glob.glob(fp))
 
 xarrays = []
@@ -47,4 +45,4 @@ fig, ax = plotting.plot_volume(mf_dataset, precision=2) #, title=title
 ax.set_yticks(major_ticks);
 ax.set_yticks(minor_ticks, minor=True);
 
-fig.savefig('/Users/andrewnolan/Desktop/mb_gridsearch_Vol.eps', facecolor='w', bbox_inches = 'tight', edgecolor='k')
+fig.savefig('./mb_gridsearch_Vol.eps', facecolor='w', bbox_inches = 'tight', edgecolor='k')
