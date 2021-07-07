@@ -81,7 +81,7 @@ def main(argv):
     idx     = find_Delta_V_eq_0(mf_dataset)
     #restart = result_filename.format(MB[idx])
 
-    print(MB[idx], file=sys.stdout)
+    print("{:.2f}".format(MB[idx]), file=sys.stdout)
     #os.environ['RESTART'] = str(restart)
 
 

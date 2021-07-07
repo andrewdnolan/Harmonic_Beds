@@ -15,6 +15,9 @@ Run a mass balance grid search to find synthetic glacier steady state (SS) confi
 
 #### `runHarmonics_p1.sh`
 Run a mass balance grid for the bed perturbed by each harmonic to find SS configuration.
+ - [ ] Copying the restart file should be based on timestep of restart files, not just wethere 
+       the mesh dir exists. 
+
 
 #### `runHarmonics_p2.sh`
 Run the pseudo surge for the bed perturbed by each harmonic.

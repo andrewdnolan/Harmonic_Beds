@@ -1,14 +1,14 @@
 #!/bin/bash
-#SBATCH --array=1-16                               # 16 jobs that run 20 at a time
-#SBATCH --job-name=SpinUp_2000a_dt_1_dx_50_        # base job name for the array
-#SBATCH --mem-per-cpu=400                          # maximum 200M per job
-#SBATCH --time=1:30:00                             # maximum walltime per job
+#SBATCH --array=1-17%10                            # 16 jobs that run 20 at a time
+#SBATCH --job-name=Pseudo_10a_dx_50_               # base job name for the array
+#SBATCH --mem-per-cpu=200                          # maximum 200M per job
+#SBATCH --time=1:00:00                             # maximum walltime per job
 #SBATCH --nodes=1                                  # Only one node is needed
 #SBATCH --ntasks=1                                 # These are serial jobs
 #SBATCH --mail-type=ALL                            # send all mail (way to much)
 #SBATCH --mail-user=andrew.d.nolan@maine.edu       # email to spend updates too
-#SBATCH --output=logs/SpinUp_dx_50_%A_%a.out       # standard output
-#SBATCH --error=logs/Spinup_dx_50_%A_%a.err        # standard error
+#SBATCH --output=logs/Pseduo_10_a_dx_50_%A_%a.out  # standard output
+#SBATCH --error=logs/Pseudo_10_a_dx_50_%A_%a.err   # standard error
 # in the previous two lines %A" is replaced by jobID and "%a" with the array index
 
 ###############################################################################
