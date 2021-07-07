@@ -34,7 +34,8 @@ if [ -f Outputs.txt ]; then
 fi
 
 # Itterate from k=1 to k_max+1 where the $k_max+1 will be the sum from 1 to k_max
-for k in 00 $(seq -w 1 $((k_max+1))); do
+# Don't need k=00 since that's whats in the "exp_01_elevation_dependent" dir
+for k in $(seq -w 1 $((k_max+1))); do
 
   if [ "$k" = $((k_max+1)) ]; then
     HARM="harmonics_01-${k_max}_H_${H}"
