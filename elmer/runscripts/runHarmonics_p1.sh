@@ -35,7 +35,8 @@ fi
 
 # Itterate from k=1 to k_max+1 where the $k_max+1 will be the sum from 1 to k_max
 # Don't need k=00 since that's whats in the "exp_01_elevation_dependent" dir
-for k in $(seq -w 1 $((k_max+1))); do
+#for k in $(seq -w 1 $((k_max+1))); do
+for k in 16; do
 
   if [ "$k" = $((k_max+1)) ]; then
     HARM="harmonics_01-${k_max}_H_${H}"
@@ -78,7 +79,7 @@ for k in $(seq -w 1 $((k_max+1))); do
             -B Data/Topography/REF_BedTopo.dat \
             -O $BED_FP \
             -H $H      \
-            -N $k      \
+            -N $k_max  \
             -R $R      \
             --sum
   else

@@ -1,1 +1,1 @@
-python3 ./SRC/utils/dat2h5.py ./Synthetic/perturbed_ratio-0.01/harmonics_00_H_100/SaveData/pseudo_k_00_10a_dt_0.1_dx_50_mb_2.01_off.dat -out_dir ./Synthetic/perturbed_ratio-0.01/harmonics_00_H_100/hdf5 -Nx 555 -dt 0.1 -offset 2.01 -PseudoSurge
+python3 ./SRC/utils/dat2h5.py ./Synthetic/perturbed_ratio-0.01/harmonics_01-15_H_100/SaveData/pseudo_k_01-15_10a_dt_0.1_dx_50_mb_1.95_off.dat -out_dir ./Synthetic/perturbed_ratio-0.01/harmonics_01-15_H_100/hdf5 -Nx 555 -dt 0.1 -offset 1.95 -PseudoSurge

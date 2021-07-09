@@ -29,13 +29,13 @@ for k in $(seq -w 1 $((k_max+1))); do
   #-----------------------------------------------------------------------------
   # Pull the data from westgrid to the local machine
   #-----------------------------------------------------------------------------
-  rsync -avP ${WESTGRID}/scratch/Harmonic_Beds/Synthetic/${RAT}/${HARM}/hdf5/*.nc \
+  rsync -avP ${WESTGRID}/scratch/Harmonic_Beds/elmer/Synthetic/${RAT}/${HARM}/hdf5/spinup_*.nc \
              ./Synthetic/${RAT}/${HARM}/hdf5/
 
   #-----------------------------------------------------------------------------
   # Make the volume plots
   #-----------------------------------------------------------------------------
-  python3 SRC/utils/plot_convergence.py \
+  python3 SRC/utils/plot_spinup.py \
           -fp "./Synthetic/${RAT}/${HARM}/hdf5/spinup_*.nc" \
           -mb 1.90 0.01 2.05 \
           --plot_volume      \
@@ -45,7 +45,7 @@ for k in $(seq -w 1 $((k_max+1))); do
   #-----------------------------------------------------------------------------
   # Make the final z_s plot
   #-----------------------------------------------------------------------------
-  python3 SRC/utils/plot_convergence.py \
+  python3 SRC/utils/plot_spinup.py \
           -fp "./Synthetic/${RAT}/${HARM}/hdf5/spinup_*.nc" \
           -mb 1.90 0.01 2.05 \
           --plot_Z_s         \
