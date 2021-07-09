@@ -8,6 +8,7 @@
 *.tif
 *.TIFF
 *.npy
+*.txt
 *.pkl
 *.zip
 *.tar.gz
