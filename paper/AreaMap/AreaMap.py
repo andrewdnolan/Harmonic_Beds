@@ -23,6 +23,9 @@ import cartopy.io.img_tiles as cimgt
 
 plt.rc("text", usetex=True)
 
+# set geopandas up to read .kml files
+gpd.io.file.fiona.drvsupport.supported_drivers['KML'] = 'rw'
+
 # https://stackoverflow.com/questions/34906124/interpolating-every-x-distance-along-multiline-in-shapely
 def to_points(geom, dist):
     num_vert = int(round(geom.length / dist))
@@ -164,6 +167,8 @@ ticks.crs = crs.proj4_init
 PreGLIMS = gpd.read_file(PreGLIMS_fn)
 PostGLIMS = gpd.read_file(PostGLIMS_fn)
 
+radar_lines = gpd.read_file('/Users/andrewnolan/Desktop/LittleKluane2021.kml', driver='KML')
+radar_lines = radar_lines.to_crs(epsg=32607)
 
 ################################################################################
 # FIGURE
@@ -175,8 +180,10 @@ ax  = plt.subplot(111, projection=crs)
 ax.imshow(base_img.transpose([1, 2, 0]), transform=crs, origin="upper", extent=imext)
 # Plot the (glims and flowline) shapefiles
 ax.add_geometries( PreGLIMS.geometry,  facecolor="none", crs=crs, edgecolor="#e7298a", linewidth=1.0)
-ax.add_geometries( PostGLIMS.geometry, facecolor="none", crs=crs, edgecolor="#d95f02", linewidth=1.0)
+ax.add_geometries( PostGLIMS.geometry, facecolor="none", crs=crs, edgecolor="#7570b3", linewidth=1.0)
 ax.add_geometries( flowline.geometry,  facecolor="none", crs=crs, edgecolor="k",       linewidth=1.0)
+# plot the radar lines from 2021
+ax.add_geometries( radar_lines.geometry,  facecolor="none", crs=crs, edgecolor="#d95f02", linewidth=2.0)
 
 ticks.loc[ticks["x"] % 1000 == 0, "geometry"].plot( ax=ax, markersize=4, marker="x", zorder=4, color="k" )
 
@@ -185,7 +192,8 @@ ticks.loc[ticks["x"] % 1000 == 0, "geometry"].plot( ax=ax, markersize=4, marker=
 ################################################################################
 patches = []
 patches.append(mpatches.Patch(edgecolor="#e7298a", facecolor="none", label="Pre-Surge" ))
-patches.append(mpatches.Patch(edgecolor="#d95f02", facecolor="none", label="Post-Surge"))
+patches.append(mpatches.Patch(edgecolor="#7570b3", facecolor="none", label="Post-Surge"))
+patches.append(Line2D([0], [0], color="#d95f02", label="2021 Radar Lines"))
 patches.append(Line2D([0], [0], color="k", label="Flowline"))
 ax.legend(handles=patches, loc="upper left", ncol=1, framealpha=1, edgecolor="black", labelspacing=0 )  # , fontsize = 'large'
 ################################################################################
@@ -215,6 +223,6 @@ ax.set_ylabel("Northing (m)", rotation=270, labelpad=15)
 inset_map()
 ################################################################################
 
-# plt.show()
-plt.savefig('geom_main_trib.eps',bbox_inches='tight', pad_inches=0.1, dpi=400)
+#plt.show()
+plt.savefig('geom_main_trib_test.eps',bbox_inches='tight', pad_inches=0.1, dpi=400)
 plt.close()
