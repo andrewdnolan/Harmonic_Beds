@@ -44,7 +44,7 @@ def make_colorbar(mf_dataset):
 
 def plot_volume(mf_dataset, precision=3, title=''):
 
-    # Make a volume xarray
+    # Make a volume xarray dataset
     Vol = mf_dataset.H.integrate("x") / mf_dataset.H.isel(t=1).integrate("x")
 
     # Make a colormap and all the associated var names
@@ -57,7 +57,7 @@ def plot_volume(mf_dataset, precision=3, title=''):
         color = cmap(norm(delta_mb))
         ax.plot(Vol.t[1:], Vol.sel(Delta_MB=delta_mb)[1:], color=color)
 
-    ax.axhline(1.0,c='k',ls=':',lw=1, alpha=0.5)
+    ax.axhline(1.0,c='k',ls=':',lw=1.0)
 
     cbar = fig.colorbar(s_map,
                     spacing='proportional',
@@ -67,19 +67,21 @@ def plot_volume(mf_dataset, precision=3, title=''):
                     drawedges=True,
                     format='%2.{}f'.format(precision))
 
-
+    # set the title
     ax.set_title(title)
 
+    # adjust x-axis limits
+    ax.set_xlim(Vol.t.min(), Vol.t.max())
     # annotate the figures axes
-    ax.set_ylabel('Relative Volume per Unit Width (km$^2$)')
+    ax.set_ylabel('Relative Volume per Unit Width')
     ax.set_xlabel('Time (a)')
     # annotate the colorbar axes
-    cbar.set_label('$\Delta \dot b$ (m a$^{-1}$)', rotation=270, labelpad=20)
-    cbar.ax.tick_params(labelsize=7)
+    cbar.set_label('$\Delta \dot b$ (m i.e. a$^{-1}$)', rotation=270, labelpad=20)
+    cbar.ax.tick_params(labelsize='small')
 
     fig.tight_layout()
 
-    return fig, ax
+    return fig, ax, cbar
 
 def plot_final_z_s(mf_dataset, precision=3, title=''):
     # Make a colormap and all the associated var names
@@ -93,7 +95,7 @@ def plot_final_z_s(mf_dataset, precision=3, title=''):
 
     ax.plot(mf_dataset.x/1000., mf_dataset.isel(t=0,Delta_MB=0).z_b, color='k', label=r'$z_{\rm b}$')
     ax.plot(mf_dataset.x/1000., mf_dataset.isel(t=1,Delta_MB=0).z_s,
-            color='k', ls=':', lw=0.5, alpha = 0.5, label=r'$z_{\rm s}(t=0)$')
+            color='k', ls=':', lw=1.0, label=r'$z_{\rm s}(t=0)$')
 
     ax.fill_between(mf_dataset.x/1000., mf_dataset.isel(t=0,Delta_MB=0).z_b, color='gray', alpha=0.5)
 
@@ -105,21 +107,129 @@ def plot_final_z_s(mf_dataset, precision=3, title=''):
                         drawedges=True,
                         format='%2.2f')
 
-    ax.legend(loc=2)
+    ax.legend()
 
+    # set the title
     ax.set_title(title)
 
     ax.set_xlabel('Length (km)')
-    ax.set_ylabel('m a.s.l.')
+    ax.set_ylabel('Elevation (m a.s.l.)')
     ax.set_xlim(0,np.max(mf_dataset.x)/1000.)
     ax.set_ylim(1200, None)
 
-    cbar.set_label('$\Delta \dot b$ (m a$^{-1}$)', rotation=270, labelpad=20)
-    cbar.ax.tick_params(labelsize=6)
+    # annotate the colorbar axes
+    cbar.set_label('$\Delta \dot b$ (m i.e. a$^{-1}$)', rotation=270, labelpad=20)
+    cbar.ax.tick_params(labelsize='small')
 
     fig.tight_layout()
 
-    return fig, ax
+    return fig, ax, cbar
+
+def plot_convergence(mf_dataset, precision=3, title=''):
+    # Make a colormap and all the associated var names
+    cmap, norm, s_map, bounds = make_colorbar(mf_dataset)
+
+    fig, ax = plt.subplots(1,1)
+
+    # Make a volume xarray dataset
+    Vol = mf_dataset.H.integrate("x") / mf_dataset.H.isel(t=1).integrate("x")
+
+    # Loop over mass balance offsets
+    for delta_mb in Vol.Delta_MB:
+        color = cmap(norm(delta_mb))
+        ax.plot(Vol.t[1:],
+                # derivative of realtive volume w.r.t.
+                np.abs(Vol.sel(Delta_MB=delta_mb)[1:].differentiate('t')),
+                color=color)
+
+    cbar = fig.colorbar(s_map,
+                    spacing='proportional',
+                    ticks=mf_dataset.Delta_MB,
+                    ax=ax,
+                    boundaries=bounds,
+                    drawedges=True,
+                    format='%2.{}f'.format(precision))
+
+    # set the title
+    ax.set_title(title)
+
+    # adjust x-axis limits
+    ax.set_xlim(Vol.t.min(), Vol.t.max())
+
+    # annotate the colorbar axes
+    cbar.set_label('$\Delta \dot b$ (m i.e. a$^{-1}$)', rotation=270, labelpad=20)
+    cbar.ax.tick_params(labelsize='small')
+
+    # Set axis labels
+    ax.set_ylabel(r"$\left| \frac{\partial V'}{\partial t} \right|$", fontsize='xx-large')
+    ax.set_xlabel('Time (a)')
+
+    # Show convergence threshold
+    ax.axhline(1e-6, ls=':', c='k', lw=1.0)
+    ax.set_yscale('log')
+
+    return fig, ax, cbar
+
+def animate_z_s(mf_dataset, stride=10, figsize=(9,3), title=''):
+
+    fig, ax = plt.subplots(figsize=figsize, constrained_layout=True)
+
+    # Set the x and y limits, which do not change throughout animation
+    ax.set_xlim(0,np.max(mf_dataset.x)/1000.)
+    ax.set_ylim(mf_dataset.z_s.min(),
+                mf_dataset.z_s.isel(t=0).max() + \
+                (mf_dataset.z_s.isel(t=0).max() - mf_dataset.z_s.isel(t=0).min())/ 10 )
+
+    # Set axes labels, which do not change throughout animation
+    ax.set_ylabel('Elevation (m a.s.l.)')
+    ax.set_xlabel('Distance along flowline (km)')
+
+    # Plot the bed which is constant throughout animation
+    ax.plot(mf_dataset.x/1000.,
+            mf_dataset.isel(t=0).z_b,
+            color='k', label=r'$z_{\rm b}$')
+
+    # Plot the initial condition
+    ax.plot(mf_dataset.x/1000.,
+            mf_dataset.isel(t=0).z_s,
+            ls = ':', lw = 1.0,
+            color='k', label=r'$z_{\rm s}(t=0)$')
+
+    # Fill between bed and bottom of plot
+    ax.fill_between(mf_dataset.x/1000.,
+                    mf_dataset.isel(t=0).z_b,
+                    y2=np.minimum(mf_dataset.isel(t=0).z_b.min(), 0.0),
+                    color='gray', alpha=0.5)
+
+    ax.legend()
+    ax.set_title(title)
+
+    line1, = ax.plot([], [], lw=2, color='tab:blue', label='$z_s(t=0.0)$',)
+    line   = [line1]
+
+    # Function to be animated
+    def animate(i):
+        # plot the free surface
+        line[0].set_data(mf_dataset.x/1000.,
+                         mf_dataset.isel(t=i).z_s)
+        line[0].set_label('$z_s(t={{{:.1f}}})$'.format(mf_dataset.t.isel(t=i).values))
+
+        ax.fill_between(mf_dataset.x/1000.,
+                        mf_dataset.isel(t=0).z_b,
+                        y2=np.minimum(mf_dataset.isel(t=0).z_b.min(), 0.0),
+                        color='gray', alpha=0.5)
+        ax.legend()
+
+        return line
+
+    NT = mf_dataset.t.size
+    anim = animation.FuncAnimation(fig, animate,
+                                   frames=np.arange(0, NT, stride),
+                                   interval=50,
+                                   blit=True)
+    plt.close()
+    return anim
+
 
 def main(argv):
 
@@ -187,16 +297,18 @@ def main(argv):
     # NOTE:: This shoud have been done in the dat2h5.py file but it's not working
     mf_dataset['z_s'] = mf_dataset.z_s.where((mf_dataset.z_s - mf_dataset.z_b) != 10., mf_dataset.z_b)
     mf_dataset["H"]   = mf_dataset.z_s - mf_dataset.z_b
+    # Flip the x-coordinate to more accurately match the map view representation of LK
+    mf_dataset['x'] = mf_dataset['x'][::-1]
     #---------------------------------------------------------------------------
 
     out_fn = args.output_filename
 
     if volume_plot:
-        fig, _  = plot_volume( mf_dataset,
+        fig, _, _  = plot_volume( mf_dataset,
                            precision=len(args.mb_range[1])-2,
                            title=title)
     if z_s_plot:
-        fig, _  = plot_final_z_s( mf_dataset,
+        fig, _, _  = plot_final_z_s( mf_dataset,
                               precision=len(args.mb_range[1])-2,
                               title=title)
 
