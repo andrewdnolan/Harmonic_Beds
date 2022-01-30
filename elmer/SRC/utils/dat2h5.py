@@ -171,7 +171,7 @@ def main():
                 coords=dict( x = x, t = t),
                 attrs=dict( description="Basal Velocity (magnitude)", units="m a^{-1}") )
         v_mean= xr.DataArray(
-                data = vm(dat[0::2,:,13], dat[0::2,:,14]).T / 10.,
+                data = vm(dat[0::2,:,13], dat[0::2,:,14]).T / 11.,
                 dims = ["x", "t"],
                 coords=dict( x = x, t = t),
                 attrs=dict( description="Depth Averaged Velocity (magnitude)", units="m a^{-1}") )
