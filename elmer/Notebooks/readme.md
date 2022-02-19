@@ -25,4 +25,4 @@ Notebooks used for data analysis and visualization:
 ### `05.NS_postprocessing.ipynb`
   - Spectral analysis of pseudo-surge results.
   - Brinkerhoff et al. 2016 slip ratios.
-  - Pseudo-surge animations. 
+  - Pseudo-surge animations.
