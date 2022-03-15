@@ -22,6 +22,39 @@ import matplotlib.colors as mcolors
 plt.rcParams['text.usetex']    = False
 plt.rcParams['animation.html'] = 'jshtml'
 
+def make_harmonic_cbar(array, cmap='viridis'):
+    #---------------------------------------------------------------------------
+    # For Seting up the colorbar:
+    #    - http://csc.ucdavis.edu/~jmahoney/matplotlib-tips.html
+    #---------------------------------------------------------------------------
+
+    try:
+        c_map = cm.get_cmap(cmap, 256)
+    except AttributeError:
+        print('Invalid colormap name passed. Check matplotlib documenation')
+        print('Using default: viridis')
+        c_map = cm.get_cmap('viridis', 256)
+
+
+    newcolors = c_map(np.linspace(0, 1, 256))
+    pink = np.array([248/256, 24/256, 148/256, 1])
+    newcolors[-256//array.size:, :] = pink
+    newcmp = mcolors.ListedColormap(newcolors)
+
+    cmap = newcmp
+    norm = mcolors.Normalize(vmin=np.min(array),
+                             vmax=np.max(array))
+
+    s_map = cm.ScalarMappable(norm=norm, cmap=cmap)
+    s_map.set_array(array)
+
+    # If color parameters is a linspace, we can set boundaries in this way
+    halfdist = (array[1] - array[0]) / 2.0
+    bounds   = np.linspace(array[0]   - halfdist,
+                           array[-1]  + halfdist,
+                           len(array) + 1)
+
+    return cmap, norm, s_map, bounds
 
 def main(argv):
 

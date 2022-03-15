@@ -22,16 +22,22 @@ import matplotlib.colors as mcolors
 plt.rcParams['text.usetex']    = False
 plt.rcParams['animation.html'] = 'jshtml'
 
-def make_colorbar(mf_dataset):
+def make_colorbar(mf_dataset, cmap='plasma'):
     #---------------------------------------------------------------------------
     # For Seting up the colorbar:
     #    - http://csc.ucdavis.edu/~jmahoney/matplotlib-tips.html
     #---------------------------------------------------------------------------
-    cmap = cm.plasma
+    try:
+        c_map = getattr(cm, cmap)
+    except AttributeError:
+        print('Invalid colormap name passed. Check matplotlib documenation')
+        print('Using default: plasma')
+        c_map = getattr(cm, 'plasma')
+
     norm = mcolors.Normalize(vmin=np.min(mf_dataset.Delta_MB),
                                   vmax=np.max(mf_dataset.Delta_MB))
 
-    s_map = cm.ScalarMappable(norm=norm, cmap=cmap)
+    s_map = cm.ScalarMappable(norm=norm, cmap=c_map)
     s_map.set_array(mf_dataset.Delta_MB)
 
     # If color parameters is a linspace, we can set boundaries in this way
@@ -40,7 +46,7 @@ def make_colorbar(mf_dataset):
                            mf_dataset.Delta_MB[-1]  + halfdist,
                            len(mf_dataset.Delta_MB) + 1)
 
-    return cmap, norm, s_map, bounds
+    return c_map, norm, s_map, bounds
 
 def plot_volume(mf_dataset, precision=3, title=''):
 
