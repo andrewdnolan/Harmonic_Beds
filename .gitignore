@@ -17,6 +17,16 @@
 *mesh.*
 *.msh
 
+# ignore shapefiles and assoc. files
+*.shp
+*.cpg
+*.dbf
+*.prj
+*.shx
+
+# radar lines
+*.kml
+
 # Include these since they are needed for all the model runs
 !elmer/Data/Topography/REF*
 !elmer/Data/SMB/SVR/dual_coef.dat
